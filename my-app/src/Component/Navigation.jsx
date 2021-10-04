@@ -1,28 +1,43 @@
-import React,{Component} from "react";
+import React, { Component } from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { NavLink } from "react-router-dom";
-import {Navbar, Nav} from 'react-bootstrap'
 
 class Navigation extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {  }
-    }
-    render() { 
-        return ( 
-            <Navbar bg="dark" expand="lg">
-            <Navbar.Toggle aria-controls="basic-navbar-nav" />
-            <Navbar.Collapse id="basic-navbar-nav">
-            <Nav>
-                <NavLink className="d-inline p-2 bg-dark text-white" to="/">All Tour</NavLink>
-                <NavLink className="d-inline p-2 bg-dark text-white" to="/login">Login</NavLink>
-                <NavLink className="d-inline p-2 bg-dark text-white" to="/signup">Signup</NavLink>
-
-            </Nav>
-            </Navbar.Collapse>    
-            </Navbar>
-         );
-    }
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    return (
+      <header className="header">
+        <nav className="nav nav--tours">
+          <a className="nav__el" href="/">
+            All tours
+          </a>
+          <from className="nav_search">
+            <button className="nav__search-btn">
+              <svg>
+                <use xlinkHref="/icons.svg#icon-search"></use>
+              </svg>
+            </button>
+            <div className="nav__search-input">
+              <input type="text" placeholder="Search tours" />
+            </div>
+          </from>
+        </nav>
+        <div className="header__logo">
+          <img src="../logo-white.png" alt="Natours logo" />
+        </div>
+        <nav className="nav nav--user">
+          <a className="nav__el" href="/login">
+            Log in
+          </a>
+          <a className="nav__el nav__el--cta" href="/#">
+            Sign up
+          </a>
+        </nav>
+      </header>
+    );
+  }
 }
- 
+
 export default Navigation;

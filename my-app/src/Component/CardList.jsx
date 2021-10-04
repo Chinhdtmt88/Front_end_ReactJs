@@ -1,7 +1,5 @@
 import React from "react";
 import "bootstrap/dist/css/bootstrap.css";
-import { Link } from "react-router-dom";
-import { ToggleButtonGroup } from "react-bootstrap";
 import moment from "moment";
 
 const CardList = (props) => {
@@ -10,12 +8,12 @@ const CardList = (props) => {
       return (
         <div className="main">
           <div className="card-container ">
-            {datalist.map((item) => {
+            {datalist.map((item, i) => {
               return (
-                <div class="card">
-                  <div class="card__header">
-                    <div class="card__picture">
-                      <div class="card__picture-overlay">&nbsp;</div>
+                <div key={i} className="card">
+                  <div className="card__header">
+                    <div className="card__picture">
+                      <div className="card__picture-overlay">&nbsp;</div>
                       <img
                         src={`../tours/${item.imageCover}`}
                         alt={`${item.name}`}
@@ -23,22 +21,22 @@ const CardList = (props) => {
                       />
                     </div>
 
-                    <h3 class="heading-tertirary">
+                    <h3 className="heading-tertirary">
                       <span>{item.name}</span>
                     </h3>
                   </div>
 
-                  <div class="card__details">
-                    <h4 class="card__sub-heading">{`${item.difficulty} ${item.duration}-day tour`}</h4>
-                    <p class="card__text">{item.summary}</p>
-                    <div class="card__data">
-                      <svg class="card__icon">
+                  <div className="card__details">
+                    <h4 className="card__sub-heading">{`${item.difficulty} ${item.duration}-day tour`}</h4>
+                    <p className="card__text">{item.summary}</p>
+                    <div className="card__data">
+                      <svg className="card__icon">
                         <use xlinkHref="img/icons.svg#icon-map-pin"></use>
                       </svg>
                       <span>{item.startLocation.description}</span>
                     </div>
-                    <div class="card__data">
-                      <svg class="card__icon">
+                    <div className="card__data">
+                      <svg className="card__icon">
                         <use xlinkHref="img/icons.svg#icon-calendar"></use>
                       </svg>
                       <span>
@@ -47,33 +45,36 @@ const CardList = (props) => {
                         )}
                       </span>
                     </div>
-                    <div class="card__data">
-                      <svg class="card__icon">
+                    <div className="card__data">
+                      <svg className="card__icon">
                         <use xlinkHref="img/icons.svg#icon-flag"></use>
                       </svg>
                       <span>{`${item.locations.length} stops`}</span>
                     </div>
-                    <div class="card__data">
-                      <svg class="card__icon">
+                    <div className="card__data">
+                      <svg className="card__icon">
                         <use xlinkHref="img/icons.svg#icon-user"></use>
                       </svg>
                       <span>{`${item.maxGroupSize} people `}</span>
                     </div>
                   </div>
 
-                  <div class="card__footer">
+                  <div className="card__footer">
                     <p>
-                      <span class="card__footer-value">{`$${item.price}`}</span>
+                      <span className="card__footer-value">{`$${item.price}`}</span>
 
-                      <span class="card__footer-text">per person</span>
+                      <span className="card__footer-text">per person</span>
                     </p>
-                    <p class="card__ratings">
-                      <span class="card__footer-value">
+                    <p className="card__ratings">
+                      <span className="card__footer-value">
                         {item.ratingsAverage}
                       </span>
-                      <span class="card__footer-text">{`rating (${item.ratingsQuantity})`}</span>
+                      <span className="card__footer-text">{`rating (${item.ratingsQuantity})`}</span>
                     </p>
-                    <a href="#" class="btn btn--green btn--small">
+                    <a
+                      href={`/tour/${item.slug}`}
+                      className="btn btn--green btn--small"
+                    >
                       Details
                     </a>
                   </div>
