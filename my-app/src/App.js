@@ -1,17 +1,15 @@
 import React from "react";
 import "./App.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
-import Login from "./Component/Login";
-import Overview from "./Component/Overview";
-import Signup from "./Component/Signup";
+import routes from "./pages/routes";
 
 function App() {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={Overview} />
-        <Route path="/login" component={Login} />
-        <Route path="/signup" component={Signup} />
+        {routes.map(({ component: Component, path, ...rest }) => {
+          return <Route component={Component} key={path} {...rest} />;
+        })}
       </Switch>
     </BrowserRouter>
   );
