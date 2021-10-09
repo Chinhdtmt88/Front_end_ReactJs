@@ -1,40 +1,13 @@
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { connect } from "react-redux";
-import { loginAction } from "../../store/actions/AuthActions";
-//import { setUserSession } from './Utils/Common';
+import React, { useState, useRouter } from "react";
+import authlogin from "../../services/AuthService";
 
 function Login(props) {
-  const [state, setState] = useState({
-    data: {},
-  });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  let errorsObj = { email: "", password: "", passwordConfirm: "" };
-  const [errors, setErrors] = useState(errorsObj);
-
-  const dispatch = useDispatch();
 
   function onLogin(e) {
     e.preventDefault();
-    let error = false;
-    const errorObj = { ...errorsObj };
-    if (email === "") {
-      errorObj.email = "Email is Required";
-      error = true;
-    }
-
-    if (password === "") {
-      errorObj.password = "Password is Required";
-      error = true;
-    }
-    setErrors(errorObj);
-
-    if (!error) {
-      console.log("form submit");
-    }
-
-    dispatch(loginAction(email, password));
+    authlogin();
   }
 
   return (
@@ -84,11 +57,4 @@ function Login(props) {
   );
 }
 
-const mapStateToProps = (state) => {
-  return {
-    email: state.email,
-    password: state.password,
-  };
-};
-
-export default connect(mapStateToProps)(Login);
+export default Login;

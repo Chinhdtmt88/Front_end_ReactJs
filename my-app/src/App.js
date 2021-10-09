@@ -8,7 +8,18 @@ function App() {
     <BrowserRouter>
       <Switch>
         {routes.map(({ component: Component, path, ...rest }) => {
-          return <Route component={Component} key={path} {...rest} />;
+          return (
+            <Route
+              key="{component}"
+              render={(props) => (
+                <React.Suspense fallback={"loading"}>
+                  <Component {...props} />
+                </React.Suspense>
+              )}
+              path={path}
+              {...rest}
+            />
+          );
         })}
       </Switch>
     </BrowserRouter>

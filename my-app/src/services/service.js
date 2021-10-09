@@ -1,10 +1,9 @@
-import axios from "axios";
-
+import api from "../utils/api";
 // eslint-disable-next-line import/no-anonymous-default-export
 export default {
   getAlltour: async function () {
     try {
-      const response = await axios.get("http://127.0.0.1:3000/api/v1/tours");
+      const response = await api.get("/api/v1/tours");
       console.log(response.data.data.data);
       if (
         (response.status >= 200 && response.status < 400) ||

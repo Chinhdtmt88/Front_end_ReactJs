@@ -1,13 +1,8 @@
-import { lazy } from "react";
+let routes = [];
 
-const Alltour = lazy(() => import("./Alltour/Alltour"));
+const context = require.context(".", true, /route.js$/);
 
-// eslint-disable-next-line import/no-anonymous-default-export
-export default [
-  {
-    path: "/",
-    exact: true,
-    public: true,
-    component: Alltour,
-  },
-];
+context.keys().forEach((path) => {
+  routes.push(require(`${path}`).default);
+});
+export default routes;
