@@ -270,7 +270,7 @@ body {
 
 .btn--green {
   background-color: #55c57a;
-  color: #fff;
+  color: rgb(230, 130, 130);
 }
 .btn--green::after {
   background-color: #55c57a;

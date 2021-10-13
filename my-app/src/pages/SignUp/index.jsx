@@ -2,6 +2,11 @@ import { useState } from "react";
 
 function SignUp() {
   console.log("trang dang ki");
-  <p>Sign in o dayyyyy</p>;
+  return (
+    <>
+      <h1>Sign up o dayyyyy</h1>
+      <p>chao ban nho</p>
+    </>
+  );
 }
 export default SignUp;

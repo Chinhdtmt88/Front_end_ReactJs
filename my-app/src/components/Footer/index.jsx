@@ -3,12 +3,12 @@ import "bootstrap/dist/css/bootstrap.css";
 
 export default function Footer() {
   return (
-    <footer class="footer">
-      <div class="footer__logo">
+    <footer className="footer">
+      <div className="footer__logo">
         {" "}
         <img src="../logo-green.png" alt="Natour logo" />
       </div>
-      <ul class="footer__nav">
+      <ul className="footer__nav">
         <li>
           <Link to="/#">About us</Link>
         </li>
@@ -25,7 +25,7 @@ export default function Footer() {
           <Link to="/#">Contact</Link>
         </li>
       </ul>
-      <p class="footer__copyright">
+      <p className="footer__copyright">
         &copy; by ChinhIoT. with from IoT Team GHTK !{" "}
       </p>
     </footer>

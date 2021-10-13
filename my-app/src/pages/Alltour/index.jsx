@@ -2,21 +2,24 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.css";
 import moment from "moment";
-import services from "../../services/service";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
+import tourApi from "../../api/tourApi";
+
+const Header = React.lazy(() => import("../../components/Header"));
+const Footer = React.lazy(() => import("../../components/Footer"));
 function Overview() {
   const [list, setList] = useState([]);
   useEffect(() => {
-    services.getAlltour().then((data) => {
-      setList(data);
-      console.log("den day roi");
-      // setList(prev=>{
-      //   prev = data;
-      //   for(da)
-      //   return prev;
-      // })
-    });
+    const getListtour = async () => {
+      try {
+        const response = await tourApi.getAll();
+        console.log(response.data.data);
+        setList(response.data.data);
+      } catch (error) {
+        console.log("Fail to fetch tour list :", error);
+      }
+    };
+
+    getListtour();
   }, []);
 
   return (
