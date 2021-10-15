@@ -8,6 +8,7 @@ const Header = React.lazy(() => import("../../components/Header"));
 const Footer = React.lazy(() => import("../../components/Footer"));
 function Overview() {
   const [list, setList] = useState([]);
+  const isLogin = localStorage.getItem("token");
   useEffect(() => {
     const getListtour = async () => {
       try {

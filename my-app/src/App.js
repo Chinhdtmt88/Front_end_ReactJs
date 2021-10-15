@@ -7,7 +7,7 @@ const Login = React.lazy(() => import("./pages/Login"));
 const Signup = React.lazy(() => import("./pages/SignUp"));
 const Overview = React.lazy(() => import("./pages/Alltour"));
 const Tour = React.lazy(() => import("./pages/Tour"));
-const Accountme = React.lazy(() => import("./pages/Account"));
+const Profile = React.lazy(() => import("./pages/Profile"));
 
 function App() {
   return (
@@ -33,7 +33,7 @@ function App() {
             }}
           ></Route>
           <Route path="/me">
-            <Accountme />
+            <Profile />
           </Route>
           <Route exact path="/">
             <Overview />

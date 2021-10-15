@@ -1,40 +1,36 @@
 import React, { useState, useRouter } from "react";
 import { Form, Button } from "react-bootstrap";
-import { setUserSession } from "../../utils/Common";
 import { showAlert } from "../../utils/alert";
 import { useHistory } from "react-router";
-import userApi from "../../api/Userapi";
+import userApi from "../../api/userApi";
+import axiosClient from "../../api/axiosClient";
 
 function Login(props) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
   let history = useHistory();
 
   async function onLogin(e) {
     e.preventDefault();
     try {
-      const response = await userApi
-        .post({
+      const url = "/users/login";
+      const res = await axiosClient
+        .post(url, {
           email: email,
           password: password,
         })
-
-        .then((response) => {
-          setLoading(false);
+        .then((res) => {
           // console.log(response.data.token);
-          window.localStorage.setItem("token", response.data.token);
-          setUserSession(response.data.token, response.data.user);
-          if (response.data.status === "success") {
+          localStorage.setItem("token", res.token);
+          localStorage.setItem("user", JSON.stringify(res.data.user));
+
+          if (res.status === "success") {
             showAlert("success", "Logged in successfully");
-            window.setTimeout(() => {
-              history.push("/");
-            }, 200);
+            history.push("/");
           }
         });
     } catch (error) {
-      showAlert("error", error.response.data.message);
+      showAlert("error", error.res.data.message);
     }
   }
 
