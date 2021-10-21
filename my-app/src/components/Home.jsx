@@ -1,32 +1,33 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import "bootstrap/dist/css/bootstrap.css";
+import React, { useState, useEffect } from "react";
+import UserService from "../services/user.service";
 import moment from "moment";
-import tourApi from "../../api/tourApi";
+import { Link } from "react-router-dom";
 
-function Overview() {
-  const [list, setList] = useState([]);
-  // const [isLogin, setIsLogin] = useState(true);
+const Home = () => {
+  const [content, setContent] = useState([]);
+
   useEffect(() => {
-    const getListtour = async () => {
-      try {
-        const response = await tourApi.getAll();
+    UserService.getPublicContent().then(
+      (response) => {
         console.log(response.data.data);
-        setList(response.data.data);
-      } catch (error) {
-        console.log("Fail to fetch tour list :", error);
+        setContent(response.data.data);
+      },
+      (error) => {
+        const _content =
+          (error.response && error.response.data) ||
+          error.message ||
+          error.toString();
+
+        setContent(_content);
       }
-    };
-
-    getListtour();
+    );
+    UserService.getPublicContent();
   }, []);
-
   return (
     <>
-      {/* <Header isLogin={isLogin} setIsLogin={setIsLogin} /> */}
       <div className="main">
         <div className="card-container ">
-          {list.map((item, i) => {
+          {content.map((item, i) => {
             return (
               <div key={i} className="card">
                 <div className="card__header">
@@ -99,9 +100,7 @@ function Overview() {
           })}
         </div>
       </div>
-      {/* <Footer /> */}
     </>
   );
-}
-
-export default Overview;
+};
+export default Home;

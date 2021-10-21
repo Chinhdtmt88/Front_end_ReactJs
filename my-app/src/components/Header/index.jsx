@@ -1,33 +1,23 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Nav } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
-import Button from "@restart/ui/esm/Button";
+import { Button, Icon, Menu } from "antd";
 import { useHistory } from "react-router-dom";
 
 export default function Header() {
-  const isLogin = localStorage.getItem("token");
   let history = useHistory();
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [data, setData] = useState([]);
-  const logout = () => {
-    localStorage.removeItem("token");
-    alert("Logout success");
+  const [isLogin, setIsLogin] = useState(false);
+  const user = JSON.parse(localStorage.getItem("user"));
+  const handlelogout = () => {
+    localStorage.clear();
+    setIsLogin(false);
     history.push("/");
   };
 
-  useEffect(() => {
-    const loadDataProfile = async () => {
-      const userStr = localStorage.getItem("user");
-      if (userStr) {
-        let user = JSON.parse(userStr);
-        setData(user);
-      }
-    };
-
-    loadDataProfile();
-  }, []);
   return (
-    <header className="header">
+    <div className="header">
       <nav className="nav nav--tours">
         <Link to="/" className="nav__el">
           All tours
@@ -47,26 +37,27 @@ export default function Header() {
         <img src="../logo-white.png" alt="Natours logo" />
       </div>
       <nav className="nav nav--user">
-        {isLogin != null ? (
-          <div>
-            <Button className="btn btn-light" onClick={logout}>
-              Logout
-            </Button>
-            <Link to="/me" className="nav__el nav__el--cta">
-              <img className="nav__user-img" src={`../users/${data.photo}`} />
-            </Link>
-          </div>
-        ) : (
-          <div>
+        {isLogin ? (
+          <>
             <Link to="/login" className="nav__el">
               Log in
             </Link>
             <Link to="/signup" className="nav__el nav__el--cta">
               Sign up
             </Link>
-          </div>
+          </>
+        ) : (
+          <>
+            <Button className="btn btn-light" onClick={handlelogout}>
+              Logout
+            </Button>
+            <Link to="/me" className="nav__el">
+              <img className="nav__user-img" />
+              {/* <span>${user.name}</span> */}
+            </Link>
+          </>
         )}
       </nav>
-    </header>
+    </div>
   );
 }

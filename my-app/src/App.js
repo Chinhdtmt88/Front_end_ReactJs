@@ -1,47 +1,144 @@
-import React, { Suspense } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Router, Switch, Route, Link } from "react-router-dom";
 import { Redirect } from "react-router";
+
+import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
-const Login = React.lazy(() => import("./pages/Login"));
-const Signup = React.lazy(() => import("./pages/SignUp"));
-const Overview = React.lazy(() => import("./pages/Alltour"));
+import Login from "./components/Login";
+import Register from "./components/Register";
+import Home from "./components/Home";
+import Profile from "./components/Profile";
+// import BoardUser from "./components/BoardUser";
+// import BoardModerator from "./components/BoardModerator";
+// import BoardAdmin from "./components/BoardAdmin";
+
+import { logout } from "./actions/auth";
+import { clearMessage } from "./actions/message";
+
+import { history } from "./helpers/history";
+
 const Tour = React.lazy(() => import("./pages/Tour"));
-const Profile = React.lazy(() => import("./pages/Profile"));
 
-function App() {
+const App = () => {
+  const [showModeratorBoard, setShowModeratorBoard] = useState(false);
+  const [showAdminBoard, setShowAdminBoard] = useState(false);
+
+  const { user: currentUser } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    history.listen((location) => {
+      dispatch(clearMessage()); // clear message when changing location
+    });
+  }, [dispatch]);
+
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
+  //     setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
+  //   }
+  // }, [currentUser]);
+
+  const logOut = () => {
+    dispatch(logout());
+  };
   return (
     <React.Suspense fallback={<p>Loading...</p>}>
-      <Router>
-        <Switch>
-          <Route path="/login">
-            <Login />
-          </Route>
-          <Route path="/signup">
-            <Signup />
-          </Route>
-          <Route
-            path="/tour/:slug"
-            render={() => {
-              // eslint-disable-next-line react/jsx-no-undef
-              // eslint-disable-next-line no-undef
-              return window.localStorage.getItem("token") ? (
-                <Tour />
-              ) : (
-                <Redirect to="/Login" />
-              );
-            }}
-          ></Route>
-          <Route path="/me">
-            <Profile />
-          </Route>
-          <Route exact path="/">
-            <Overview />
-          </Route>
-        </Switch>
+      <Router history={history}>
+        <div>
+          <nav className="navbar navbar-expand navbar-dark bg-dark">
+            <Link to={"/"} className="navbar-brand">
+              Chinh IoT
+            </Link>
+            <div className="navbar-nav mr-auto">
+              <li className="nav-item">
+                <Link to={"/home"} className="nav__el">
+                  Home
+                </Link>
+              </li>
+              <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+              {/* {showModeratorBoard && (
+              <li className="nav-item">
+                <Link to={"/mod"} className="nav-link">
+                  Moderator Board
+                </Link>
+              </li>
+            )} */}
+
+              {/* {showAdminBoard && (
+              <li className="nav-item">
+                <Link to={"/admin"} className="nav-link">
+                  Admin Board
+                </Link>
+              </li>
+            )} */}
+              {currentUser && (
+                <li className="nav-item">
+                  <Link to={"/user"} className="nav__el">
+                    User
+                  </Link>
+                </li>
+              )}
+            </div>
+
+            {currentUser ? (
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/profile"} className="nav__el">
+                    {currentUser.email}
+                  </Link>
+                </li>
+                <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <li className="nav-item">
+                  <a href="/login" className="nav__el" onClick={logOut}>
+                    LogOut
+                  </a>
+                </li>
+              </div>
+            ) : (
+              <div className="navbar-nav ml-auto">
+                <li className="nav-item">
+                  <Link to={"/login"} className="nav__el">
+                    Login
+                  </Link>
+                </li>
+                <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <li className="nav-item">
+                  <Link to={"/register"} className="nav__el">
+                    Sign Up
+                  </Link>
+                </li>
+              </div>
+            )}
+          </nav>
+          <div className="container mt-3">
+            <Switch>
+              <Route exact path={["/", "/home"]} component={Home} />
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/profile" component={Profile} />
+              <Route
+                path="/tour/:slug"
+                render={() => {
+                  return window.localStorage.getItem("token") ? (
+                    <Tour />
+                  ) : (
+                    <Redirect to="/Login" />
+                  );
+                }}
+              ></Route>
+
+              {/* <Route path="/user" component={BoardUser} /> */}
+              {/* <Route path="/mod" component={BoardModerator} />
+            <Route path="/admin" component={BoardAdmin} /> */}
+            </Switch>
+          </div>
+        </div>
       </Router>
     </React.Suspense>
   );
-}
+};
 
 export default App;

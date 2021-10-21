@@ -270,7 +270,7 @@ body {
 
 .btn--green {
   background-color: #55c57a;
-  color: rgb(230, 130, 130);
+  color: rgb(252, 250, 250);
 }
 .btn--green::after {
   background-color: #55c57a;
@@ -936,7 +936,7 @@ body {
 .nav__el:visited {
   color: #f7f7f7;
   text-transform: uppercase;
-  font-size: 1.6rem;
+  font-size: 1.3rem;
   text-decoration: none;
   display: -webkit-inline-box;
   display: -ms-inline-flexbox;

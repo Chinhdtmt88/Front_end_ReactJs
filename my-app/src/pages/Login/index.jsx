@@ -2,7 +2,6 @@ import React, { useState, useRouter } from "react";
 import { Form, Button } from "react-bootstrap";
 import { showAlert } from "../../utils/alert";
 import { useHistory } from "react-router";
-import userApi from "../../api/userApi";
 import axiosClient from "../../api/axiosClient";
 
 function Login(props) {
@@ -14,23 +13,23 @@ function Login(props) {
     e.preventDefault();
     try {
       const url = "/users/login";
-      const res = await axiosClient
+      const response = await axiosClient
         .post(url, {
           email: email,
           password: password,
         })
-        .then((res) => {
+        .then((response) => {
           // console.log(response.data.token);
-          localStorage.setItem("token", res.token);
-          localStorage.setItem("user", JSON.stringify(res.data.user));
+          localStorage.setItem("token", response.token);
+          localStorage.setItem("user", JSON.stringify(response.data.user));
 
-          if (res.status === "success") {
+          if (response.status === "success") {
             showAlert("success", "Logged in successfully");
             history.push("/");
           }
         });
     } catch (error) {
-      showAlert("error", error.res.data.message);
+      showAlert("error", error.response.data.message);
     }
   }
 
