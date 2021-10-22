@@ -337,7 +337,7 @@ body {
 }
 
 .header {
-  background-color: #444;
+  /* background-color: #444; */
   padding: 0 5rem;
   height: 8rem;
   position: relative;
@@ -833,8 +833,8 @@ body {
 }
 
 .footer {
-  background-color: #f7f7f7;
-  padding: 6rem 4rem 3rem 4rem;
+  background-color: #292727;
+  padding: 2rem 4rem 2rem 4rem;
   font-size: 1.4rem;
   display: grid;
   grid-template-columns: auto auto;
@@ -865,6 +865,7 @@ body {
 }
 .footer__nav {
   list-style: none;
+  font-size: 14px;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -934,6 +935,7 @@ body {
 .nav__el,
 .nav__el:link,
 .nav__el:visited {
+  margin-top: 10px;
   color: #f7f7f7;
   text-transform: uppercase;
   font-size: 1.3rem;

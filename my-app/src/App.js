@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Router, Switch, Route, Link } from "react-router-dom";
@@ -50,7 +51,9 @@ const App = () => {
         <div>
           <nav className="navbar navbar-expand navbar-dark bg-dark">
             <Link to={"/"} className="navbar-brand">
-              Chinh IoT
+              <div className="header__logo">
+                <img src="../logo-white.png" alt="Natours logo" />
+              </div>
             </Link>
             <div className="navbar-nav mr-auto">
               <li className="nav-item">
@@ -87,7 +90,12 @@ const App = () => {
               <div className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <Link to={"/profile"} className="nav__el">
-                    {currentUser.email}
+                    <img
+                      className="nav__user-img"
+                      src={`../users/${currentUser.photo}`}
+                      alt={`Photo of ${currentUser.name}`}
+                    />
+                    {currentUser.name}
                   </Link>
                 </li>
                 <span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
@@ -113,12 +121,12 @@ const App = () => {
               </div>
             )}
           </nav>
-          <div className="container mt-3">
+          <div className="main">
             <Switch>
               <Route exact path={["/", "/home"]} component={Home} />
               <Route exact path="/login" component={Login} />
               <Route exact path="/register" component={Register} />
-              <Route exact path="/profile" component={Profile} />
+              <Route path="/profile" component={Profile} />
               <Route
                 path="/tour/:slug"
                 render={() => {
@@ -135,6 +143,33 @@ const App = () => {
             <Route path="/admin" component={BoardAdmin} /> */}
             </Switch>
           </div>
+          <footer className="footer navbar-dark bg-dark">
+            <div className="footer__logo">
+              {" "}
+              <img src="../logo-green.png" alt="Natour logo" />
+            </div>
+            <ul className="footer__nav">
+              <li>
+                <Link to="/#">About us</Link>
+              </li>
+              <li>
+                <Link to="/#">Download apps</Link>
+              </li>
+              <li>
+                <Link to="/#">Become a guide </Link>
+              </li>
+              <li>
+                <Link to="/#">Careers</Link>
+              </li>
+              <li>
+                <Link to="/#">Contact</Link>
+              </li>
+            </ul>
+            <p className="footer__copyright">
+              &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &copy; by ChinhIoT. with
+              from IoT Team GHTK !{" "}
+            </p>
+          </footer>
         </div>
       </Router>
     </React.Suspense>

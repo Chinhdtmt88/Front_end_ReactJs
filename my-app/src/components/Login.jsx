@@ -64,58 +64,59 @@ const Login = (props) => {
   }
 
   return (
-    <div className="main">
-      <div className="login-form">
-        <img
-          src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-          alt="profile-img"
-          className="profile-img-card"
-        />
+    <div className="login-form">
+      <h2 class="heading-secondary ma-bt-lg">Log into your account</h2>
+      <img
+        src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+        alt="profile-img"
+        className="profile-img-card"
+      />
 
-        <Form onSubmit={handleLogin} ref={form}>
+      <Form onSubmit={handleLogin} ref={form}>
+        <div className="form-group">
+          <label className="form__label">Email</label>
+          <Input
+            type="text"
+            className="form__input"
+            name="Email"
+            value={email}
+            onChange={onChangeEmail}
+            validations={[required]}
+          />
+        </div>
+
+        <div className="form-group ma-bt-md">
+          <label className="form__label">Password</label>
+          <Input
+            type="password"
+            className="form__input"
+            name="password"
+            value={password}
+            placeholder="********"
+            minlength="8"
+            onChange={onChangePassword}
+            validations={[required]}
+          />
+        </div>
+
+        <div className="form-group">
+          <button className="btn btn--green" disabled={loading}>
+            {loading && (
+              <span className="spinner-border spinner-border-sm"></span>
+            )}
+            <span>Login</span>
+          </button>
+        </div>
+
+        {message && (
           <div className="form-group">
-            <label htmlFor="email">Email</label>
-            <Input
-              type="text"
-              className="form-control"
-              name="Email"
-              value={email}
-              onChange={onChangeEmail}
-              validations={[required]}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <Input
-              type="password"
-              className="form-control"
-              name="password"
-              value={password}
-              onChange={onChangePassword}
-              validations={[required]}
-            />
-          </div>
-
-          <div className="form-group">
-            <button className="btn btn-primary btn-block" disabled={loading}>
-              {loading && (
-                <span className="spinner-border spinner-border-sm"></span>
-              )}
-              <span>Login</span>
-            </button>
-          </div>
-
-          {message && (
-            <div className="form-group">
-              <div className="alert alert-danger" role="alert">
-                {message}
-              </div>
+            <div className="alert alert-danger" role="alert">
+              {message}
             </div>
-          )}
-          <CheckButton style={{ display: "none" }} ref={checkBtn} />
-        </Form>
-      </div>
+          </div>
+        )}
+        <CheckButton style={{ display: "none" }} ref={checkBtn} />
+      </Form>
     </div>
   );
 };

@@ -23,7 +23,6 @@ function Overview() {
 
   return (
     <>
-      {/* <Header isLogin={isLogin} setIsLogin={setIsLogin} /> */}
       <div className="main">
         <div className="card-container ">
           {list.map((item, i) => {
@@ -99,7 +98,6 @@ function Overview() {
           })}
         </div>
       </div>
-      {/* <Footer /> */}
     </>
   );
 }
