@@ -1,11 +1,24 @@
-import React from "react";
-import { Link } from "react-router-dom";
+/* eslint-disable jsx-a11y/img-redundant-alt */
+import React, { useState, useRef } from "react";
 import authService from "../services/auth.service";
+
+import Form from "react-validation/build/form";
+import Input from "react-validation/build/input";
+import CheckButton from "react-validation/build/button";
 // import Settings from "../components/Settings";
 // import MyBookings from "../components/MyBookings";
 // import MyReviews from "../components/MyReviews";
 // import Billing from "../components/Billing";
 
+const required = (value) => {
+  if (!value) {
+    return (
+      <div className="alert alert-danger" role="alert">
+        This field is required
+      </div>
+    );
+  }
+};
 const Profile = () => {
   const settings = [
     {
@@ -31,6 +44,29 @@ const Profile = () => {
     },
   ];
 
+  const Admin = [
+    {
+      path: "/#",
+      icon: "map",
+      text: "Manage Tours",
+    },
+    {
+      path: "/#",
+      icon: "users",
+      text: "Manage Users",
+    },
+    {
+      path: "/#",
+      icon: "star",
+      text: "Manage Reviews",
+    },
+    {
+      path: "/#",
+      icon: "briefcase",
+      text: "Manage Booking",
+    },
+  ];
+
   const currentData = authService.getCurrentUser();
   const routeProfile = settings.map(({ path, icon, text, active }, i) => (
     <>
@@ -44,76 +80,129 @@ const Profile = () => {
       </li>
     </>
   ));
+
+  const routeAdmin = Admin.map(({ path, icon, text, active }, i) => (
+    <>
+      <li key={i} className={`${active ? "side-nav--active" : ""}`}>
+        <a href={path}>
+          <svg>
+            <use xlinkHref={`../icons.svg#icon-${icon}`}></use>
+          </svg>
+          {text}
+        </a>
+      </li>
+    </>
+  ));
+
+  const form = useRef();
+  const checkBtn = useRef();
+  const [name, setName] = useState(currentData.name);
+  const [email, setEmail] = useState(currentData.email);
+  const [photo, setPhoto] = useState(currentData.photo);
+  const onChangeName = (e) => {
+    setName(e.target.value);
+  };
+
+  const onChangeEmail = (e) => {
+    setEmail(e.target.value);
+  };
+  const onChangePhoto = (e) => {
+    const photo = e.target.files[0];
+    setPhoto(photo);
+  };
+  const handleUpdate = (e) => {
+    e.preventDefault();
+    // if (checkBtn.current.context._errors.length === 0) {
+    //   dispatch(login(email, password))
+    //     .then(() => {
+    //       props.history.push("/");
+    //       window.location.reload();
+    //     })
+    //     .catch(() => {
+    //       setLoading(false);
+    //     });
+    // } else {
+    //   setLoading(false);
+    // }
+  };
+
   return (
-    <div className="user-view">
-      <nav className="user-view__menu">
-        <ul className="side-nav">{routeProfile}</ul>
+    <>
+      <div className="user-view">
+        <nav className="user-view__menu">
+          <ul className="side-nav">{routeProfile}</ul>
 
-        {currentData.role === "admin" ? (
-          <div className="admin-nav">
-            <h5 className="admin-nav__heading">Admin</h5>
-            <ul className="side-nav">
-              <li className="side-nav">
-                <Link to="/#">
-                  <svg>
-                    <use xlinkHref="../icons.svg#icon-map"></use>"
-                  </svg>
-                  Manage tours
-                </Link>
-              </li>
-
-              <li className="side-nav">
-                <h3>
-                  <Link to="/#">
-                    <svg>
-                      <use xlinkHref="../icons.svg#icon-users"></use>"
-                    </svg>
-                    Manage users
-                  </Link>
-                </h3>
-              </li>
-
-              <li className="side-nav">
-                <h3>
-                  <Link to="/#">
-                    <svg>
-                      <use xlinkHref="../icons.svg#icon-star"></use>"
-                    </svg>
-                    Manage reviews
-                  </Link>
-                </h3>
-              </li>
-
-              <li className="side-nav">
-                <h3>
-                  <Link to="/#">
-                    <svg>
-                      <use xlinkHref="../icons.svg#icon-briefcase"></use>"
-                    </svg>
-                    Manage booking
-                  </Link>
-                </h3>
-              </li>
-            </ul>
-          </div>
-        ) : (
-          ""
-        )}
-      </nav>
-
-      <div className="user-view__content">
-        <div className="user-view__from-container">
-          <h2 className="heading-secondary.ma-bt-md">Your account settings</h2>
-
-          <form className="form form-user-data">
-            <div className="form__group">
-              <label className="form__label">Name</label>
-              {/* <Input id= */}
+          {currentData.role === "admin" ? (
+            <div className="admin-nav">
+              <h5 className="admin-nav__heading">Admin</h5>
+              <ul className="side-nav">{routeAdmin}</ul>
             </div>
-          </form>
+          ) : (
+            ""
+          )}
+        </nav>
+
+        <div className="user-view__content">
+          <div className="user-view__form-container">
+            <h2 className="heading-secondary.ma-bt-md">
+              Your account settings
+            </h2>
+
+            <Form
+              className="form form-user-data"
+              onSubmit={handleUpdate}
+              ref={form}
+            >
+              <div className="form-group">
+                <label className="form__label">Name</label>
+                <Input
+                  type="text"
+                  className="form__input"
+                  name="name"
+                  value={name}
+                  onChange={onChangeName}
+                  validations={[required]}
+                />
+              </div>
+
+              <div className="form-group ma-bt-md">
+                <label className="form__label">Email address</label>
+                <Input
+                  type="email"
+                  className="form__input"
+                  name="email"
+                  value={email}
+                  onChange={onChangeEmail}
+                  validations={[required]}
+                />
+              </div>
+
+              <div className="form__group form__photo-upload">
+                <img
+                  src={`../users/${currentData.photo}`}
+                  className="form__user-photo"
+                  alt="Photo user"
+                />
+                <input
+                  type="file"
+                  className="form__upload"
+                  accept="image/*"
+                  name="photo"
+                  id="photo"
+                  onChange={onChangePhoto}
+                />
+                <label htmlFor="photo">Choose new photo</label>
+              </div>
+              <CheckButton
+                className="btn btn--small btn--green"
+                style={{ display: "none" }}
+                ref={checkBtn}
+              />
+            </Form>
+          </div>
         </div>
       </div>
-    </div>
+    </>
 
     // <div className="container">
     //   <header className="jumbotron">
