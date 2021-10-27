@@ -2,7 +2,7 @@ import { SAVE_TOURS } from "../actions/types";
 
 const user = JSON.parse(localStorage.getItem("user"));
 
-const initialState = user ? { tour: [] } : {};
+const initialState = user ? { tours: [] } : {};
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default function (state = initialState, action) {

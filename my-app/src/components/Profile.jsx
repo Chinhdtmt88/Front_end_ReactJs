@@ -8,7 +8,6 @@ import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
-import { updatesetting } from "../actions/updateuser";
 import userApi from "../api/userApi";
 
 const required = (value) => {
