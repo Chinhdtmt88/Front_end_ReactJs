@@ -93,7 +93,6 @@ const Login = (props) => {
             name="password"
             value={password}
             placeholder="********"
-            minlength="8"
             onChange={onChangePassword}
             validations={[required]}
           />

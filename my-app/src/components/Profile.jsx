@@ -1,14 +1,15 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useRef } from "react";
 import authService from "../services/auth.service";
+import { useDispatch, useSelector } from "react-redux";
 
+import { showAlert } from "../ultil/alert";
 import Form from "react-validation/build/form";
 import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
-// import Settings from "../components/Settings";
-// import MyBookings from "../components/MyBookings";
-// import MyReviews from "../components/MyReviews";
-// import Billing from "../components/Billing";
+
+import { updatesetting } from "../actions/updateuser";
+import userApi from "../api/userApi";
 
 const required = (value) => {
   if (!value) {
@@ -67,6 +68,7 @@ const Profile = () => {
     },
   ];
 
+  const dispatch = useDispatch();
   const currentData = authService.getCurrentUser();
   const routeProfile = settings.map(({ path, icon, text, active }, i) => (
     <>
@@ -99,6 +101,8 @@ const Profile = () => {
   const [name, setName] = useState(currentData.name);
   const [email, setEmail] = useState(currentData.email);
   const [photo, setPhoto] = useState(currentData.photo);
+  const [loading, setLoading] = useState(false);
+  const { message } = useSelector((state) => state.message);
   const onChangeName = (e) => {
     setName(e.target.value);
   };
@@ -110,20 +114,22 @@ const Profile = () => {
     const photo = e.target.files[0];
     setPhoto(photo);
   };
-  const handleUpdate = (e) => {
+  const handleUpdate = async (e) => {
     e.preventDefault();
-    // if (checkBtn.current.context._errors.length === 0) {
-    //   dispatch(login(email, password))
-    //     .then(() => {
-    //       props.history.push("/");
-    //       window.location.reload();
-    //     })
-    //     .catch(() => {
-    //       setLoading(false);
-    //     });
-    // } else {
-    //   setLoading(false);
-    // }
+
+    if (checkBtn.current.context._errors.length === 0) {
+      const data = { name, email, photo, setting_id: currentData._id };
+      //call api
+      const response = await userApi.updateSetting(data);
+      setLoading(true);
+      if (response && response.data && response.data.success) {
+        showAlert("success");
+        window.location.reload();
+      }
+    } else {
+      showAlert("no success");
+      setLoading(false);
+    }
   };
 
   return (
@@ -193,11 +199,25 @@ const Profile = () => {
                 />
                 <label htmlFor="photo">Choose new photo</label>
               </div>
-              <CheckButton
-                className="btn btn--small btn--green"
-                style={{ display: "none" }}
-                ref={checkBtn}
-              />
+              <div className="form-group right">
+                <button
+                  className="btn btn--small btn--green"
+                  disabled={loading}
+                >
+                  {loading && (
+                    <span className="spinner-border spinner-border-sm"></span>
+                  )}
+                  <span>Save Settings</span>
+                </button>
+              </div>
+              {message && (
+                <div className="form-group">
+                  <div className="alert alert-danger" role="alert">
+                    {message}
+                  </div>
+                </div>
+              )}
+              <CheckButton style={{ display: "none" }} ref={checkBtn} />
             </Form>
           </div>
         </div>

@@ -20,7 +20,7 @@ import { clearMessage } from "./actions/message";
 
 import { history } from "./helpers/history";
 
-const Tour = React.lazy(() => import("./pages/Tour"));
+const Tour = React.lazy(() => import("../src/components/Tour"));
 
 const App = () => {
   const [showModeratorBoard, setShowModeratorBoard] = useState(false);
@@ -52,7 +52,7 @@ const App = () => {
           <nav className="navbar navbar-expand navbar-dark bg-dark">
             <Link to={"/"} className="navbar-brand">
               <div className="header__logo">
-                <img src="../logo-white.png" alt="Natours logo" />
+                <img src="../logo-green.png" alt="Natours logo" />
               </div>
             </Link>
             <div className="navbar-nav mr-auto">
@@ -128,7 +128,7 @@ const App = () => {
               <Route exact path="/register" component={Register} />
               <Route path="/profile" component={Profile} />
               <Route
-                path="/tour/:slug"
+                path="/tour/:slug/:tourId"
                 render={() => {
                   return window.localStorage.getItem("token") ? (
                     <Tour />

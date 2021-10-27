@@ -2,14 +2,18 @@ import React, { useState, useEffect } from "react";
 import UserService from "../services/user.service";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
+import { getAll } from "../actions/tours";
 
 const Home = () => {
   const [content, setContent] = useState([]);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     UserService.getPublicContent().then(
       (response) => {
         console.log(response.data.data);
+        dispatch(getAll());
         setContent(response.data.data);
       },
       (error) => {
@@ -89,7 +93,7 @@ const Home = () => {
                   <span className="card__footer-text">{`rating (${item.ratingsQuantity})`}</span>
                 </p>
                 <Link
-                  to={`/tour/${item.slug}`}
+                  to={`/tour/${item.slug}/${item.id}`}
                   className="btn btn--green btn--small"
                 >
                   Details
