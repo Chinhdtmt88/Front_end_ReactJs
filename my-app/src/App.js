@@ -52,7 +52,7 @@ const App = () => {
           <nav className="navbar navbar-expand navbar-dark bg-dark">
             <Link to={"/"} className="navbar-brand">
               <div className="header__logo">
-                <img src="../logo-green.png" alt="Natours logo" />
+                <img src="/logo-green.png" alt="Natours logo" />
               </div>
             </Link>
             <div className="navbar-nav mr-auto">
@@ -92,7 +92,7 @@ const App = () => {
                   <Link to={"/profile"} className="nav__el">
                     <img
                       className="nav__user-img"
-                      src={`../users/${currentUser.photo}`}
+                      src={`/users/${currentUser.photo}`}
                       alt={`Photo of ${currentUser.name}`}
                     />
                     {currentUser.name}
@@ -146,7 +146,7 @@ const App = () => {
           <footer className="footer navbar-dark bg-dark">
             <div className="footer__logo">
               {" "}
-              <img src="../logo-green.png" alt="Natour logo" />
+              <img src="/logo-green.png" alt="Natour logo" />
             </div>
             <ul className="footer__nav">
               <li>

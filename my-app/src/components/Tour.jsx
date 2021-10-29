@@ -1,15 +1,32 @@
-import React, { useEffect, useState } from "react";
-
-import { useHistory, useParams } from "react-router-dom";
+/* eslint-disable react-hooks/rules-of-hooks */
+import React, { useEffect, useState, useRef } from "react";
+import moment from "moment";
+import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
-import tourApi from "../api/tourApi";
+// eslint-disable-next-line import/no-webpack-loader-syntax
+import mapboxgl from "mapbox-gl";
+import ReactMapGL from "react-map-gl";
+import tourApi from "../services/tour.service";
+
+mapboxgl.accessToken =
+  "pk.eyJ1IjoiY2hpbmhudjQ2IiwiYSI6ImNrdDhibW1kazEwbnMydmxqZTN0NTNwYjgifQ.LegkQHZ53fkU8hcpa-Py2w";
 
 function Tour(props) {
   console.log("den day chưa");
   const { tours } = useSelector((state) => state.tour);
   const { slug, tourId } = useParams();
-  const [tour, setTour] = useState({});
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const [tour, setTour] = useState({
+    guides: [],
+    startDates: [],
+    images: [],
+    description: "",
+  });
+  const mapContainer = useRef(null);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const map = useRef(null);
+  const [lng, setLng] = useState(-70.9);
+  const [lat, setlat] = useState(42.35);
+  const [zoom, setZoom] = useState(9);
   useEffect(() => {
     // Todo: Call api0
     const getTour = async () => {
@@ -23,14 +40,162 @@ function Tour(props) {
     };
     getTour();
   }, [tours, tourId]);
-  console.log(slug, tourId);
+
+  const Quick = [
+    {
+      icon: "calendar",
+      label: "NEXT DAY",
+      text: `${moment(tour.startDates[0]).format("DD/MM/YYYY")}`,
+    },
+    {
+      icon: "trending-up",
+      label: "DIFFICULTY",
+      text: `${tour.difficulty}`,
+    },
+    {
+      icon: "user",
+      label: "PARTICIPAINTS",
+      text: `${tour.maxGroupSize}`,
+    },
+    {
+      icon: "star",
+      label: "RATING",
+      text: `${tour.ratingsAverage}`,
+    },
+  ];
+
+  const listQuick = Quick.map(({ icon, label, text }, i) => (
+    <>
+      <li key={i} className="overview-box__detail">
+        <svg className="overview-box__icon">
+          <use xlinkHref={`/icons.svg#icon-${icon}`}></use>
+        </svg>
+        <span className="overview-box__label">{label}</span>
+        <span className="overview-box__text">{text}</span>
+      </li>
+    </>
+  ));
+
+  const guides = tour.guides.map((guide, i) => (
+    <div key={i} className="overview-box__detail">
+      <img
+        className="overview-box__img"
+        src={`/users/${guide.photo}`}
+        alt={guide.name}
+      ></img>
+      {guide.role === "lead-guide" ? (
+        <span className="overview-box__label">Lead guide</span>
+      ) : (
+        <span className="overview-box__label">Tour guide</span>
+      )}
+      <span className="overview-box__text">{guide.name}</span>
+    </div>
+  ));
+
+  const parapraphs = tour.description.split("\n");
+  const p = parapraphs.map((para, i) => (
+    <p key={i} className="description__text">
+      {para}
+    </p>
+  ));
+
+  const Img = tour.images.map((img, i) => (
+    <div className="picture-box">
+      <img
+        className="picture-box__img"
+        src={`/tours/${img}`}
+        alt={`The Park Camper Tour ${i}`}
+      />
+    </div>
+  ));
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    if (map.current) return;
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [lng, lat],
+      zoom: zoom,
+    });
+  });
+
+  useEffect(() => {
+    if (!map.current) return; // wait for map to initialize
+    map.current.on("move", () => {
+      setLng(map.current.getCenter().lng.toFixed(4));
+      setlat(map.current.getCenter().lat.toFixed(4));
+      setZoom(map.current.getZoom().toFixed(2));
+    });
+  });
+
   return (
     <>
-      <div>
-        <h1>this is page Tour</h1>
+      <section className="section-header">
+        <>
+          <div className="header__hero-overlay">&nbsp;</div>
+          <img
+            className="header__hero-img"
+            src={`/tours/${tour.imageCover}`}
+            alt={tour.name}
+          />
+        </>
+        <div className="heading-box">
+          <h1 className="heading-primary">
+            <span>{tour.name}</span>
+          </h1>
+          <div className="heading-box__group">
+            <div className="heading-box__detail">
+              <svg className="heading-box__icon">
+                <use xlinkHref="/icons.svg#icon-clock"></use>
+              </svg>
+              <span className="heading-box__text">{tour.duration} DAYS</span>
+            </div>
+            <div className="heading-box__detail">
+              <svg className="heading-box__icon">
+                <use xlinkHref="/icons.svg#icon-map-pin"></use>
+              </svg>
+              <span className="heading-box__text">{tour.name} DAYS</span>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="section-description">
+        <div className="overview-box">
+          <div>
+            <div className="overview-box__group">
+              <h2 className="heading-secondary ma-bt-lg">Quick facts</h2>
+              <div> {listQuick}</div>
+            </div>
+            <div className="overview-box__group">
+              <h2 className="heading-secondary ma-bt-lg">Your tour guide</h2>
+              <div>{guides}</div>
+            </div>
+          </div>
+        </div>
 
-        {tourId ? <pre>{JSON.stringify(tour)}</pre> : "Không có tour nào"}
-      </div>
+        <div className="description-box">
+          <h2 className="heading-secondary ma-bt-lg">
+            {`About ${tour.name} tour`}{" "}
+          </h2>
+          <span className="description__text">{p}</span>
+        </div>
+      </section>
+
+      <section className="section-pictures">
+        <div>{Img}</div>
+      </section>
+
+      <section>
+        <div>
+          <div className="sidebar">
+            Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
+          </div>
+          <div ref={mapContainer} className="map-container" />
+        </div>
+      </section>
     </>
   );
 }
