@@ -5,10 +5,10 @@ import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import mapboxgl from "mapbox-gl";
-import ReactMapGL from "react-map-gl";
+import ReactMapGL, { Marker } from "react-map-gl";
 import tourApi from "../services/tour.service";
 
-mapboxgl.accessToken =
+const REACT_APP_MAPBOX_TOKEN =
   "pk.eyJ1IjoiY2hpbmhudjQ2IiwiYSI6ImNrdDhibW1kazEwbnMydmxqZTN0NTNwYjgifQ.LegkQHZ53fkU8hcpa-Py2w";
 
 function Tour(props) {
@@ -19,14 +19,16 @@ function Tour(props) {
     guides: [],
     startDates: [],
     images: [],
+    locations: [],
     description: "",
   });
-  const mapContainer = useRef(null);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const map = useRef(null);
-  const [lng, setLng] = useState(-70.9);
-  const [lat, setlat] = useState(42.35);
-  const [zoom, setZoom] = useState(9);
+
+  const [viewport, setViewport] = useState({
+    latitude: 21.028511,
+    longitude: 105.804817,
+    zoom: 9,
+  });
+
   useEffect(() => {
     // Todo: Call api0
     const getTour = async () => {
@@ -112,24 +114,6 @@ function Tour(props) {
   // eslint-disable-next-line react-hooks/rules-of-hooks
 
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    if (map.current) return;
-    map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11",
-      center: [lng, lat],
-      zoom: zoom,
-    });
-  });
-
-  useEffect(() => {
-    if (!map.current) return; // wait for map to initialize
-    map.current.on("move", () => {
-      setLng(map.current.getCenter().lng.toFixed(4));
-      setlat(map.current.getCenter().lat.toFixed(4));
-      setZoom(map.current.getZoom().toFixed(2));
-    });
-  });
 
   return (
     <>
@@ -190,10 +174,26 @@ function Tour(props) {
 
       <section>
         <div>
-          <div className="sidebar">
-            Longitude: {lng} | Latitude: {lat} | Zoom: {zoom}
-          </div>
-          <div ref={mapContainer} className="map-container" />
+          <ReactMapGL
+            {...viewport}
+            height="600px"
+            width="auto"
+            mapStyle="mapbox://styles/mapbox/streets-v11"
+            onViewportChange={setViewport}
+            mapboxApiAccessToken={REACT_APP_MAPBOX_TOKEN}
+          >
+            {tour.locations.map((point) => (
+              <Marker
+                key={tour.locations._id}
+                latitude={point.coordinates[1]}
+                longitude={point.coordinates[0]}
+              >
+                <button className="marker-btn">
+                  <img src="/Map_pin_icon_green.svg.png" alt="GHTK Icon" />
+                </button>
+              </Marker>
+            ))}
+          </ReactMapGL>
         </div>
       </section>
     </>

@@ -27,22 +27,20 @@
 .App-link {
   color: #61dafb;
 }
-.map-container {
-  height: 400px;
+/* .map-container {
+  height: 600px;
 }
 
-.sidebar {
+.side {
   background-color: rgba(35, 55, 75, 0.9);
-  color: #fff;
+  color: rgb(233, 113, 113);
   padding: 6px 12px;
   font-family: monospace;
   z-index: 1;
   position: absolute;
-  top: 0;
-  left: 0;
-  margin: 12px;
+  font-size: medium;
   border-radius: 4px;
-}
+} */
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -604,14 +602,23 @@ body {
   width: 100%;
 }
 
-/* .marker {
-  background-image: url("../src/asset/pin.png");
+.marker {
+  background-image: url("../src/ultil/Map_pin_icon_green.svg.png");
   background-size: cover;
   width: 32px;
   height: 40px;
   cursor: pointer;
-} */
+}
+.marker-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
 
+.marker-btn img {
+  width: 20px;
+  height: 20px;
+}
 .mapboxgl-popup {
   max-width: 25rem;
 }
