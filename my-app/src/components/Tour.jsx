@@ -4,8 +4,7 @@ import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import mapboxgl from "mapbox-gl";
-import ReactMapGL, { Marker } from "react-map-gl";
+import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import tourApi from "../services/tour.service";
 
 const REACT_APP_MAPBOX_TOKEN =
@@ -24,10 +23,12 @@ function Tour(props) {
   });
 
   const [viewport, setViewport] = useState({
-    latitude: 21.028511,
-    longitude: 105.804817,
-    zoom: 9,
+    // latitude: 21.03460455806355,
+    // longitude: 105.85061296268242,
+    // zoom: 9,
   });
+
+  const [selectpoint, setSelectedPoint] = useState(null);
 
   useEffect(() => {
     // Todo: Call api0
@@ -36,6 +37,14 @@ function Tour(props) {
         const response = await tourApi.getTour(tourId);
         console.log(response);
         setTour(response.data.data);
+        let myTour = response.data.data;
+        if (myTour.locations.length > 0) {
+          setViewport({
+            latitude: myTour.locations[0].coordinates[1],
+            longitude: myTour.locations[0].coordinates[0],
+            zoom: 9,
+          });
+        }
       } catch (error) {
         console.log("Fail to featch tour", error);
       }
@@ -111,9 +120,17 @@ function Tour(props) {
     </div>
   ));
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const listener = (e) => {
+      if (e.key === "Escape") {
+        setSelectedPoint(null);
+      }
+    };
+    window.addEventListener("keydown", listener);
+    return () => {
+      window.removeEventListener("keydown", listener);
+    };
+  }, []);
 
   return (
     <>
@@ -188,11 +205,31 @@ function Tour(props) {
                 latitude={point.coordinates[1]}
                 longitude={point.coordinates[0]}
               >
-                <button className="marker-btn">
+                <button
+                  className="marker-btn"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setSelectedPoint(point);
+                  }}
+                >
                   <img src="/Map_pin_icon_green.svg.png" alt="GHTK Icon" />
                 </button>
               </Marker>
             ))}
+
+            {selectpoint ? (
+              <Popup
+                latitude={selectpoint.coordinates[1]}
+                longitude={selectpoint.coordinates[0]}
+                onClose={() => {
+                  setSelectedPoint(null);
+                }}
+              >
+                <div>
+                  <h4 className="text-secondary">{selectpoint.description}</h4>
+                </div>
+              </Popup>
+            ) : null}
           </ReactMapGL>
         </div>
       </section>
