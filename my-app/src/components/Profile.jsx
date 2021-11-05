@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import authService from "../services/auth.service";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -9,6 +9,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
 import userApi from "../api/userApi";
+import userAction from "../actions/users";
 
 const required = (value) => {
   if (!value) {
@@ -66,9 +67,25 @@ const Profile = () => {
       text: "Manage Booking",
     },
   ];
+  let user = JSON.parse(localStorage.getItem("user"));
 
-  const dispatch = useDispatch();
-  const currentData = authService.getCurrentUser();
+  // const dispatch = useDispatch();
+  // const [myProfile, setMyProfile] = useState({});
+
+  // useEffect(() => {
+  //   // Todo: Call api0
+  //   const ProfileMe = async () => {
+  //     try {
+  //       const response = await userApi.getMe();
+  //       setMyProfile(response.data.data);
+  //       console.log(response.data.data);
+  //     } catch (error) {
+  //       console.log("Fail to featch tour", error);
+  //     }
+  //   };
+  //   ProfileMe();
+  // }, []);
+
   const routeProfile = settings.map(({ path, icon, text, active }, i) => (
     <>
       <li key={i} className={`${active ? "side-nav--active" : ""}`}>
@@ -97,9 +114,12 @@ const Profile = () => {
 
   const form = useRef();
   const checkBtn = useRef();
-  const [name, setName] = useState(currentData.name);
-  const [email, setEmail] = useState(currentData.email);
-  const [photo, setPhoto] = useState(currentData.photo);
+  const [name, setName] = useState(user.name);
+  const [email, setEmail] = useState(user.email);
+  const [photo, setPhoto] = useState(user.photo);
+  const [password, setPassword] = useState();
+  const [newpassword, setNewpassword] = useState(user.email);
+  const [confirmPass, setConfirmPass] = useState(user.email);
   const [loading, setLoading] = useState(false);
   const { message } = useSelector((state) => state.message);
   const onChangeName = (e) => {
@@ -111,24 +131,43 @@ const Profile = () => {
   };
   const onChangePhoto = (e) => {
     const photo = e.target.files[0];
+    console.log(e.target.files[0]);
     setPhoto(photo);
   };
   const handleUpdate = async (e) => {
     e.preventDefault();
-
+    // setLoading(true);
     if (checkBtn.current.context._errors.length === 0) {
-      const data = { name, email, photo, setting_id: currentData._id };
+      const data = { name, email, photo };
       //call api
-      const response = await userApi.updateSetting(data);
-      setLoading(true);
-      if (response && response.data && response.data.success) {
-        showAlert("success");
+
+      const response = await userApi.updateMe(data);
+      console.log(response);
+      if (response.status === "success") {
+        showAlert(
+          "success",
+          `${response.data.user.name} update in successfully!`
+        );
+        // dispatch(userAction.UpdateProfile(response.data));
+        localStorage.setItem("user", JSON.stringify(response.data.user));
         window.location.reload();
+        console.log(response.data.user.name);
       }
     } else {
       showAlert("no success");
       setLoading(false);
     }
+  };
+
+  const Password = (e) => {
+    setPassword(e.target.value);
+  };
+
+  const newPassword = (e) => {
+    setNewpassword(e.target.value);
+  };
+  const ConfirmNewPassword = (e) => {
+    setConfirmPass(e.target.value);
   };
 
   return (
@@ -137,7 +176,7 @@ const Profile = () => {
         <nav className="user-view__menu">
           <ul className="side-nav">{routeProfile}</ul>
 
-          {currentData.role === "admin" ? (
+          {user.role === "admin" ? (
             <div className="admin-nav">
               <h5 className="admin-nav__heading">Admin</h5>
               <ul className="side-nav">{routeAdmin}</ul>
@@ -149,7 +188,7 @@ const Profile = () => {
 
         <div className="user-view__content">
           <div className="user-view__form-container">
-            <h2 className="heading-secondary.ma-bt-md">
+            <h2 className="heading-secondary ma-bt-md">
               Your account settings
             </h2>
 
@@ -184,14 +223,13 @@ const Profile = () => {
 
               <div className="form__group form__photo-upload">
                 <img
-                  src={`../users/${currentData.photo}`}
+                  src={`../users/${user.photo}`}
                   className="form__user-photo"
                   alt="Photo user"
                 />
-                <input
+                <Input
                   type="file"
                   className="form__upload"
-                  accept="image/*"
                   name="photo"
                   id="photo"
                   onChange={onChangePhoto}
@@ -219,35 +257,75 @@ const Profile = () => {
               <CheckButton style={{ display: "none" }} ref={checkBtn} />
             </Form>
           </div>
+          <div className="user-view__content">
+            <div className="user-view__form-container">
+              <h2 className="heading-secondary ma-bt-md">Password changed</h2>
+
+              <Form
+                className="form form-user-data"
+                // onSubmit={handleChangePass}
+                ref={form}
+              >
+                <div className="form-group">
+                  <label className="form__label">Current password</label>
+                  <Input
+                    type="password"
+                    className="form__input"
+                    name="password"
+                    value={password}
+                    onChange={Password}
+                    validations={[required]}
+                  />
+                </div>
+
+                <div className="form-group ma-bt-md">
+                  <label className="form__label">New Password</label>
+                  <Input
+                    type="password"
+                    className="form__input"
+                    name="password"
+                    value={newpassword}
+                    onChange={newPassword}
+                    validations={[required]}
+                  />
+                </div>
+
+                <div className="form-group ma-bt-md">
+                  <label className="form__label">Confirm New Password</label>
+                  <Input
+                    type="password"
+                    className="form__input"
+                    name="email"
+                    value={confirmPass}
+                    onChange={ConfirmNewPassword}
+                    validations={[required]}
+                  />
+                </div>
+                <div className="form-group right">
+                  <button
+                    className="btn btn--small btn--green"
+                    disabled={loading}
+                  >
+                    {loading && (
+                      <span className="spinner-border spinner-border-sm"></span>
+                    )}
+                    <span>Save Password</span>
+                  </button>
+                </div>
+                {message && (
+                  <div className="form-group">
+                    <div className="alert alert-danger" role="alert">
+                      {message}
+                    </div>
+                  </div>
+                )}
+                <CheckButton style={{ display: "none" }} ref={checkBtn} />
+              </Form>
+            </div>
+          </div>
         </div>
       </div>
     </>
-
-    // <div className="container">
-    //   <header className="jumbotron">
-    //     <h3>
-    //       <strong>{currentData.name}</strong> Profile
-    //     </h3>
-    //   </header>
-    //   {/* <p>
-    //     <strong>Token:</strong> {currentData.token.substring(0, 20)} ...{" "}
-    //     {currentData.token.substr(currentData.token.length - 20)}
-    //   </p> */}
-    //   <p>
-    //     <strong>Id:</strong> {currentData._id}
-    //   </p>
-    //   <p>
-    //     <strong>Email:</strong> {currentData.email}
-    //   </p>
-    //   <strong>Authorities:</strong>
-    //   {currentData.role}
-    //   {/* <ul>
-    //     {currentData.data.user.role &&
-    //       currentData.data.user.role.map((role, index) => (
-    //         <li key={index}>{role}</li>
-    //       ))}
-    //   </ul> */}
-    // </div>
   );
 };
 

@@ -65,7 +65,7 @@ const Login = (props) => {
 
   return (
     <div className="login-form">
-      <h2 class="heading-secondary ma-bt-lg">Log into your account</h2>
+      <h2 className="heading-secondary ma-bt-lg">Log into your account</h2>
       <img
         src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
         alt="profile-img"

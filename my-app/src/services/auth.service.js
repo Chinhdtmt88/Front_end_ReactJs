@@ -1,12 +1,12 @@
 import axiosClient from "../api/axiosClient";
 
-const register = (username, email, passwordConfirm, password) => {
+const register = (name, email, password, passwordConfirm) => {
   const url = "/users/signup";
   return axiosClient.post(url, {
-    username,
+    name,
     email,
-    passwordConfirm,
     password,
+    passwordConfirm,
   });
 };
 

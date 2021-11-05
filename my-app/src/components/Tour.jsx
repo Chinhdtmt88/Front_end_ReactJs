@@ -3,6 +3,7 @@ import React, { useEffect, useState, useRef } from "react";
 import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { FaStar } from "react-icons/fa";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import tourApi from "../services/tour.service";
@@ -19,9 +20,11 @@ function Tour(props) {
     startDates: [],
     images: [],
     locations: [],
+    reviews: [],
     description: "",
   });
 
+  const [rating, setRating] = useState(5);
   const [viewport, setViewport] = useState({
     // latitude: 21.03460455806355,
     // longitude: 105.85061296268242,
@@ -115,7 +118,7 @@ function Tour(props) {
       <img
         className="picture-box__img"
         src={`/tours/${img}`}
-        alt={`The Park Camper Tour ${i}`}
+        alt={`The Park Camper Tour ${i + 1}`}
       />
     </div>
   ));
@@ -231,6 +234,57 @@ function Tour(props) {
               </Popup>
             ) : null}
           </ReactMapGL>
+        </div>
+      </section>
+
+      <section>
+        <div className="reviews">
+          {tour.reviews.map((review) => (
+            <>
+              <div className="reviews__card">
+                <div className="reviews__avatar">
+                  <img
+                    className="reviews__avatar-img"
+                    src={`/users/${review.user.photo}`}
+                    alt={`${review.user.name}`}
+                  />
+                  <h4 className="reviews__user">{review.user.name}</h4>
+                </div>
+                <h4 className="review__text">{review.review}</h4>
+                <div className="reviews__rating">
+                  {[1, 2, 3, 4, 5].map((star, i) => {
+                    return (
+                      <FaStar
+                        className={`reviews__star--${
+                          review.rating >= star ? "active" : "inactive"
+                        }`}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
+            </>
+          ))}
+        </div>
+      </section>
+
+      <section className="section-cta">
+        <div className="cta">
+          {tour.images.map((image, i) => (
+            // eslint-disable-next-line jsx-a11y/img-redundant-alt
+            <img
+              className={`cta__img cta__img--${i}`}
+              src={`/tours/${image}`}
+              alt="tour picture"
+            />
+          ))}
+          <div className="cta__content">
+            <h2 className="heading-secondary"> What are you waiting for ?</h2>
+            <p className="cta__text">{`${tour.duration} day . 1 adventure. Make it yours today !`}</p>
+            <button className="btn btn--green span-all-rows">
+              Book tour now!
+            </button>
+          </div>
         </div>
       </section>
     </>

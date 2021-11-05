@@ -11,9 +11,6 @@ import Login from "./components/Login";
 import Register from "./components/Register";
 import Home from "./components/Home";
 import Profile from "./components/Profile";
-// import BoardUser from "./components/BoardUser";
-// import BoardModerator from "./components/BoardModerator";
-// import BoardAdmin from "./components/BoardAdmin";
 
 import { logout } from "./actions/auth";
 import { clearMessage } from "./actions/message";
@@ -23,9 +20,6 @@ import { history } from "./helpers/history";
 const Tour = React.lazy(() => import("../src/components/Tour"));
 
 const App = () => {
-  const [showModeratorBoard, setShowModeratorBoard] = useState(false);
-  const [showAdminBoard, setShowAdminBoard] = useState(false);
-
   const { user: currentUser } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
@@ -34,13 +28,6 @@ const App = () => {
       dispatch(clearMessage()); // clear message when changing location
     });
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     setShowModeratorBoard(currentUser.roles.includes("ROLE_MODERATOR"));
-  //     setShowAdminBoard(currentUser.roles.includes("ROLE_ADMIN"));
-  //   }
-  // }, [currentUser]);
 
   const logOut = () => {
     dispatch(logout());
@@ -77,13 +64,13 @@ const App = () => {
                 </Link>
               </li>
             )} */}
-              {currentUser && (
+              {/* {currentUser && (
                 <li className="nav-item">
                   <Link to={"/user"} className="nav__el">
                     User
                   </Link>
                 </li>
-              )}
+              )} */}
             </div>
 
             {currentUser ? (
