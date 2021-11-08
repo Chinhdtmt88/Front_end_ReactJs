@@ -48,7 +48,8 @@ const vpassword = (value) => {
   }
 };
 const vpasswordConfirm = (value, props, comp) => {
-  console.log(value, comp);
+  //React validation form password
+  //   console.log(value, comp);
   //   eslint-disable-next-line eqeqeq
   if (value != comp.password[0].value) {
     return (

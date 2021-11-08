@@ -13,6 +13,12 @@ const userApi = {
       headers: authHeader(),
     });
   },
+  updateMyPassword: (data) => {
+    const url = `/users/updateMyPassword`;
+    return axiosClient.patch(url, JSON.stringify(data), {
+      headers: authHeader(),
+    });
+  },
   updateAdmnin: (data) => {
     const url = `/users/${data.setting_id}`;
 

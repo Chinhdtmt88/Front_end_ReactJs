@@ -114,14 +114,16 @@ const Profile = () => {
 
   const form = useRef();
   const checkBtn = useRef();
+  const checkBtn1 = useRef();
   const [name, setName] = useState(user.name);
   const [email, setEmail] = useState(user.email);
   const [photo, setPhoto] = useState(user.photo);
-  const [password, setPassword] = useState();
-  const [newpassword, setNewpassword] = useState(user.email);
-  const [confirmPass, setConfirmPass] = useState(user.email);
+  const [passwordCurrent, setPasswordCurrent] = useState("********");
+  const [password, setPassword] = useState("********");
+  const [passwordConfirm, setPasswordConfirm] = useState("********");
   const [loading, setLoading] = useState(false);
   const { message } = useSelector((state) => state.message);
+
   const onChangeName = (e) => {
     setName(e.target.value);
   };
@@ -132,6 +134,7 @@ const Profile = () => {
   const onChangePhoto = (e) => {
     const photo = e.target.files[0];
     console.log(e.target.files[0]);
+    // eslint-disable-next-line no-undef
     setPhoto(photo);
   };
   const handleUpdate = async (e) => {
@@ -159,17 +162,61 @@ const Profile = () => {
     }
   };
 
+  const vnewpassword = (value) => {
+    if (value.length < 6 || value.length > 40) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          The password must be between 6 and 40 characters.
+        </div>
+      );
+    }
+  };
+  const vconfirmPass = (value, props, comp) => {
+    //React validation form password
+    // console.log(value, comp);
+    //   eslint-disable-next-line eqeqeq
+    if (value != comp.newpassword[0].value) {
+      return (
+        <div className="alert alert-danger" role="alert">
+          Passwords don't match
+        </div>
+      );
+    }
+  };
+
   const Password = (e) => {
-    setPassword(e.target.value);
+    setPasswordCurrent(e.target.value);
   };
 
   const newPassword = (e) => {
-    setNewpassword(e.target.value);
+    setPassword(e.target.value);
   };
   const ConfirmNewPassword = (e) => {
-    setConfirmPass(e.target.value);
+    setPasswordConfirm(e.target.value);
   };
 
+  const handleChangePass = async (e) => {
+    e.preventDefault();
+    // setLoading(true);
+    if (checkBtn1.current.context._errors.length === 0) {
+      const data = { passwordCurrent, password, passwordConfirm };
+      //call api
+
+      const response = await userApi.updateMyPassword(data);
+      console.log(response);
+      if (response.status === "success") {
+        showAlert(
+          "success",
+          `${response.data.user.name} update password in successfully!`
+        );
+        // dispatch(userAction.UpdateProfile(response.data));
+        console.log(response.data.user.name);
+      }
+    } else {
+      showAlert("no success");
+      setLoading(false);
+    }
+  };
   return (
     <>
       <div className="user-view">
@@ -263,7 +310,7 @@ const Profile = () => {
 
               <Form
                 className="form form-user-data"
-                // onSubmit={handleChangePass}
+                onSubmit={handleChangePass}
                 ref={form}
               >
                 <div className="form-group">
@@ -272,7 +319,7 @@ const Profile = () => {
                     type="password"
                     className="form__input"
                     name="password"
-                    value={password}
+                    value={passwordCurrent}
                     onChange={Password}
                     validations={[required]}
                   />
@@ -283,10 +330,10 @@ const Profile = () => {
                   <Input
                     type="password"
                     className="form__input"
-                    name="password"
-                    value={newpassword}
+                    name="newpassword"
+                    value={password}
                     onChange={newPassword}
-                    validations={[required]}
+                    validations={[required, vnewpassword]}
                   />
                 </div>
 
@@ -295,10 +342,10 @@ const Profile = () => {
                   <Input
                     type="password"
                     className="form__input"
-                    name="email"
-                    value={confirmPass}
+                    name="confirmPass"
+                    value={passwordConfirm}
                     onChange={ConfirmNewPassword}
-                    validations={[required]}
+                    validations={[required, vnewpassword, vconfirmPass]}
                   />
                 </div>
                 <div className="form-group right">
@@ -319,7 +366,7 @@ const Profile = () => {
                     </div>
                   </div>
                 )}
-                <CheckButton style={{ display: "none" }} ref={checkBtn} />
+                <CheckButton style={{ display: "none" }} ref={checkBtn1} />
               </Form>
             </div>
           </div>
