@@ -1,29 +1,29 @@
 {
   "files": {
-    "main.css": "/Front_end_ReactJs/static/css/main.74efc292.chunk.css",
-    "main.js": "/Front_end_ReactJs/static/js/main.3f80caa7.chunk.js",
-    "main.js.map": "/Front_end_ReactJs/static/js/main.3f80caa7.chunk.js.map",
-    "runtime-main.js": "/Front_end_ReactJs/static/js/runtime-main.42b3c8bb.js",
-    "runtime-main.js.map": "/Front_end_ReactJs/static/js/runtime-main.42b3c8bb.js.map",
-    "static/css/2.7f03db0f.chunk.css": "/Front_end_ReactJs/static/css/2.7f03db0f.chunk.css",
-    "static/js/2.44ef5210.chunk.js": "/Front_end_ReactJs/static/js/2.44ef5210.chunk.js",
-    "static/js/2.44ef5210.chunk.js.map": "/Front_end_ReactJs/static/js/2.44ef5210.chunk.js.map",
-    "static/js/3.d41e1239.chunk.js": "/Front_end_ReactJs/static/js/3.d41e1239.chunk.js",
-    "static/js/3.d41e1239.chunk.js.map": "/Front_end_ReactJs/static/js/3.d41e1239.chunk.js.map",
-    "static/js/4.d963c473.chunk.js": "/Front_end_ReactJs/static/js/4.d963c473.chunk.js",
-    "static/js/4.d963c473.chunk.js.map": "/Front_end_ReactJs/static/js/4.d963c473.chunk.js.map",
-    "index.html": "/Front_end_ReactJs/index.html",
-    "static/css/2.7f03db0f.chunk.css.map": "/Front_end_ReactJs/static/css/2.7f03db0f.chunk.css.map",
-    "static/css/main.74efc292.chunk.css.map": "/Front_end_ReactJs/static/css/main.74efc292.chunk.css.map",
-    "static/js/2.44ef5210.chunk.js.LICENSE.txt": "/Front_end_ReactJs/static/js/2.44ef5210.chunk.js.LICENSE.txt",
-    "static/js/3.d41e1239.chunk.js.LICENSE.txt": "/Front_end_ReactJs/static/js/3.d41e1239.chunk.js.LICENSE.txt",
-    "static/media/App.css": "/Front_end_ReactJs/static/media/Map_pin_icon_green.svg.7110def1.png"
+    "main.css": "/Front_end_Reactjs/static/css/main.85e9a42e.chunk.css",
+    "main.js": "/Front_end_Reactjs/static/js/main.c3b132e3.chunk.js",
+    "main.js.map": "/Front_end_Reactjs/static/js/main.c3b132e3.chunk.js.map",
+    "runtime-main.js": "/Front_end_Reactjs/static/js/runtime-main.52020130.js",
+    "runtime-main.js.map": "/Front_end_Reactjs/static/js/runtime-main.52020130.js.map",
+    "static/css/2.7f03db0f.chunk.css": "/Front_end_Reactjs/static/css/2.7f03db0f.chunk.css",
+    "static/js/2.44ef5210.chunk.js": "/Front_end_Reactjs/static/js/2.44ef5210.chunk.js",
+    "static/js/2.44ef5210.chunk.js.map": "/Front_end_Reactjs/static/js/2.44ef5210.chunk.js.map",
+    "static/js/3.4594edd4.chunk.js": "/Front_end_Reactjs/static/js/3.4594edd4.chunk.js",
+    "static/js/3.4594edd4.chunk.js.map": "/Front_end_Reactjs/static/js/3.4594edd4.chunk.js.map",
+    "static/js/4.d963c473.chunk.js": "/Front_end_Reactjs/static/js/4.d963c473.chunk.js",
+    "static/js/4.d963c473.chunk.js.map": "/Front_end_Reactjs/static/js/4.d963c473.chunk.js.map",
+    "index.html": "/Front_end_Reactjs/index.html",
+    "static/css/2.7f03db0f.chunk.css.map": "/Front_end_Reactjs/static/css/2.7f03db0f.chunk.css.map",
+    "static/css/main.85e9a42e.chunk.css.map": "/Front_end_Reactjs/static/css/main.85e9a42e.chunk.css.map",
+    "static/js/2.44ef5210.chunk.js.LICENSE.txt": "/Front_end_Reactjs/static/js/2.44ef5210.chunk.js.LICENSE.txt",
+    "static/js/3.4594edd4.chunk.js.LICENSE.txt": "/Front_end_Reactjs/static/js/3.4594edd4.chunk.js.LICENSE.txt",
+    "static/media/App.css": "/Front_end_Reactjs/static/media/Map_pin_icon_green.svg.7110def1.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.42b3c8bb.js",
+    "static/js/runtime-main.52020130.js",
     "static/css/2.7f03db0f.chunk.css",
     "static/js/2.44ef5210.chunk.js",
-    "static/css/main.74efc292.chunk.css",
-    "static/js/main.3f80caa7.chunk.js"
+    "static/css/main.85e9a42e.chunk.css",
+    "static/js/main.c3b132e3.chunk.js"
   ]
 }
