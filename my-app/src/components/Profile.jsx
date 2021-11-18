@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 import React, { useState, useRef, useEffect } from "react";
-import authService from "../services/auth.service";
+import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import { showAlert } from "../ultil/alert";
@@ -9,7 +9,7 @@ import Input from "react-validation/build/input";
 import CheckButton from "react-validation/build/button";
 
 import userApi from "../api/userApi";
-import userAction from "../actions/users";
+// const Manage_user = React.lazy(() => import("../src/components/Manage_user"));
 
 const required = (value) => {
   if (!value) {
@@ -52,7 +52,7 @@ const Profile = () => {
       text: "Manage Tours",
     },
     {
-      path: "/#",
+      path: "/manage_user",
       icon: "users",
       text: "Manage Users",
     },
@@ -89,12 +89,12 @@ const Profile = () => {
   const routeProfile = settings.map(({ path, icon, text, active }, i) => (
     <>
       <li key={i} className={`${active ? "side-nav--active" : ""}`}>
-        <a href={path}>
+        <Link to={path}>
           <svg>
             <use xlinkHref={`../icons.svg#icon-${icon}`}></use>
           </svg>
           {text}
-        </a>
+        </Link>
       </li>
     </>
   ));
@@ -102,12 +102,12 @@ const Profile = () => {
   const routeAdmin = Admin.map(({ path, icon, text, active }, i) => (
     <>
       <li key={i} className={`${active ? "side-nav--active" : ""}`}>
-        <a href={path}>
+        <Link to={path}>
           <svg>
             <use xlinkHref={`../icons.svg#icon-${icon}`}></use>
           </svg>
           {text}
-        </a>
+        </Link>
       </li>
     </>
   ));
@@ -172,9 +172,6 @@ const Profile = () => {
     }
   };
   const vconfirmPass = (value, props, comp) => {
-    //React validation form password
-    // console.log(value, comp);
-    //   eslint-disable-next-line eqeqeq
     if (value != comp.newpassword[0].value) {
       return (
         <div className="alert alert-danger" role="alert">

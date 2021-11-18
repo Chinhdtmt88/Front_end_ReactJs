@@ -27,6 +27,14 @@ const userApi = {
       headers: authHeader(),
     });
   },
+  manageuser: (payload) => {
+    const url = `/users`;
+    return axiosClient.get(url, { headers: authHeader() }, { params: payload });
+  },
+  deleteUser: (id) => {
+    const url = `/users/` + id;
+    return axiosClient.delete(url, { headers: authHeader() });
+  },
 };
 
 export default userApi;

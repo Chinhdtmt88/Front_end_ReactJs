@@ -11,3 +11,6 @@ export const SET_MESSAGE = "SET_MESSAGE";
 export const CLEAR_MESSAGE = "CLEAR_MESSAGE";
 
 export const SAVE_TOURS = "SAVE_TOURS";
+
+export const GET_ALL_USER = "GET_ALL_USER";
+export const GET_ALL_USER_FAIL = "GET_ALL_USER_FAIL";
