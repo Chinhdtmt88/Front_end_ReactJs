@@ -1,24 +1,25 @@
 import React, { useState, useRef, useEffect } from "react";
-import _, { includes } from "lodash";
+import { get } from "lodash";
 import { useDispatch, useSelector } from "react-redux";
-import { AllUser } from "../actions/users";
-import { TIME_FORMAT_DATE_TIME } from "../reducers/constant";
-import { PAGINATION } from "../reducers/constant";
-import { DEFAULT_VALUE } from "../reducers/constant";
+import { TIME_FORMAT_DATE_TIME } from "../../reducers/constant";
+import { PAGINATION } from "../../reducers/constant";
+import { DEFAULT_VALUE } from "../../reducers/constant";
 import {
   Button,
-  DatePicker,
   Card,
   Table,
   Typography,
-  Modal,
   message,
+  Col,
+  Row,
+  Popconfirm,
 } from "antd";
 import "antd/dist/antd.css";
 import moment from "moment";
-import { DeleteOutlined, ExclamationCircleOutlined } from "@ant-design/icons";
-import userApi from "../api/userApi";
-
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import EditRoleUser from "./modals/EditRoleUser";
+import { AllUser } from "../../actions/users";
+import userApi from "../../api/userApi";
 const { Text } = Typography;
 
 function Manage_user({
@@ -27,8 +28,7 @@ function Manage_user({
   loading,
   dataSource,
   onChangeParam,
-  handleShowConfirmDelete,
-  param,
+  params,
 }) {
   const CARD_STYLE = {
     borderRadius: "0.42rem",
@@ -42,30 +42,69 @@ function Manage_user({
     borderBottom: "none",
   };
   const today = new Date();
-  // const dispatch = useDispatch();
-  // const _handleGetUser = async () => {
-  //   await dispatch(AllUser.getAllUser());
-  // };
-  // const handleShowConfirmDelete = (record) => {
-  //   Modal.confirm({
-  //     title: <span>Xác nhận xóa user</span>,
-  //     icon: <ExclamationCircleOutlined />,
-  //     okText: "Xác nhận",
-  //     okType: "danger",
-  //     cancelText: "Hủy",
-  //     content: "",
-  //     onOk() {
-  //       userApi
-  //         .deleteUser(record._id)
-  //         .then(() => {
-  //           message.success("Xóa user thành công.");
-  //           _handleGetUser();
-  //         })
-  //         .catch(() => message.error("Xoá user không thành công"));
-  //     },
-  //     onCancel() {},
-  //   });
-  // };
+
+  const CellAction = ({ record }) => {
+    const dispatch = useDispatch();
+    const [modal, setModal] = useState({
+      visible: false,
+      isEdit: true,
+      id: null,
+      data: null,
+    });
+
+    const _handleShowModal = async () => {
+      setModal((prev) => ({
+        ...prev,
+        visible: !prev.visible,
+        isEdit: !prev.visible ? true : false,
+        id: record.id,
+        data: record,
+      }));
+    };
+
+    const _handleGetUser = async () => {
+      await dispatch(AllUser.getAllUser());
+    };
+
+    const _handleDeleteuser = async () => {
+      const response = await userApi.deleteUser(record._id);
+      if (response.status) {
+        message.success("Xoa User thanh cong");
+        _handleGetUser();
+        onChangeParam({
+          page: params.page,
+          size: params.size,
+        });
+      } else {
+        message.error(get(response, "data.message", "Co loi xay ra"), 5);
+      }
+    };
+
+    return (
+      <Row align="middle" justify="center">
+        <Col>
+          <Button size="small" type="text" onClick={_handleShowModal}>
+            <EditOutlined />
+          </Button>
+        </Col>
+        <Col>
+          <Popconfirm
+            cancelText="Quay lai"
+            okText="xac nhan"
+            placement="topRight"
+            title="Xac nhan xoa user"
+            onConfirm={_handleDeleteuser}
+          >
+            <Button size="small" type="text">
+              <DeleteOutlined />
+            </Button>
+          </Popconfirm>
+        </Col>
+        <EditRoleUser modal={modal} onShowModal={_handleShowModal} />
+      </Row>
+    );
+  };
+
   const columns = [
     {
       title: "STT",
@@ -114,23 +153,7 @@ function Manage_user({
       key: "",
       width: "4%",
       align: "center",
-      render: (_, record) => {
-        // if (!includes(status_allow_delete, record.status)) return null;
-        return (
-          <div className="d-flex align-items-center justify-content-center">
-            <Button
-              danger
-              size="small"
-              type="link"
-              onClick={() => handleShowConfirmDelete(record)}
-            >
-              <span className="d-flex align-items-center">
-                <DeleteOutlined />
-              </span>
-            </Button>
-          </div>
-        );
-      },
+      render: (_, record) => <CellAction record={record} />,
     },
   ];
   const renderCardExtra = () => {
@@ -142,7 +165,7 @@ function Manage_user({
   };
 
   return (
-    <div>
+    <>
       <h2>This is ❤❤😊😂😂😂manage_user</h2>
 
       <Card
@@ -163,8 +186,8 @@ function Manage_user({
           columns={columns}
           dataSource={dataSource}
           pagination={{
-            pageSize: param.size,
-            current: param.page,
+            pageSize: params.size,
+            current: params.page,
             defaultPageSize: PAGINATION.page,
             total,
             showSizeChanger: true,
@@ -177,7 +200,7 @@ function Manage_user({
           }}
         />
       </Card>
-    </div>
+    </>
   );
 }
 

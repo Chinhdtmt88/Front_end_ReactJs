@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
-import tourApi from "../services/tour.service";
+import tourApi from "../api/tourApi";
 
 const REACT_APP_MAPBOX_TOKEN =
   "pk.eyJ1IjoiY2hpbmhudjQ2IiwiYSI6ImNrdDhibW1kazEwbnMydmxqZTN0NTNwYjgifQ.LegkQHZ53fkU8hcpa-Py2w";
@@ -34,7 +34,6 @@ function Tour(props) {
   const [selectpoint, setSelectedPoint] = useState(null);
 
   useEffect(() => {
-    // Todo: Call api0
     const getTour = async () => {
       try {
         const response = await tourApi.getTour(tourId);

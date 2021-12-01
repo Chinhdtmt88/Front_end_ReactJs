@@ -16,7 +16,7 @@ const Login = React.lazy(() => import("../src/components/Login"));
 const Register = React.lazy(() => import("../src/components/Register"));
 const Profile = React.lazy(() => import("../src/components/Profile"));
 const Tour = React.lazy(() => import("../src/components/Tour"));
-const ManageUser = React.lazy(() => import("../src/pages/Manage_user"));
+const ManageUser = React.lazy(() => import("../src/pages/Manage_user/index"));
 // const ManageUser = React.lazy(() => import("../src/components/Manage_user"));
 const App = () => {
   const { user: currentUser } = useSelector((state) => state.auth);

@@ -1,13 +1,13 @@
 import axiosClient from "./axiosClient";
 
 const tourApi = {
-  getAll: (params) => {
+  getAll: () => {
     const url = "/tours";
-    return axiosClient.get(url, { params });
+    return axiosClient.get(url);
   },
 
   getTour: (tourId) => {
-    const url = `/tours/${tourId}`;
+    const url = "/tours/" + tourId;
     return axiosClient.get(url);
   },
 };
