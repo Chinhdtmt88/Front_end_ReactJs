@@ -35,9 +35,9 @@ const userApi = {
     const url = `/users/` + id;
     return axiosClient.delete(url, { headers: authHeader() });
   },
-  updateUser: (id) => {
+  updateUser: (id, data) => {
     const url = `/users/` + id;
-    return axiosClient.patch(url, { headers: authHeader() });
+    return axiosClient.patch(url, data, { headers: authHeader() });
   },
 };
 

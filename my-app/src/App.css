@@ -118,6 +118,9 @@ body {
   margin: 0 auto;
 }
 
+.manage_user {
+  text-align: center;
+}
 .ma-bt-md {
   margin-bottom: 3rem !important;
 }
@@ -137,6 +140,9 @@ body {
   background-color: #e0e0e0;
 }
 
+/* .text-ghtk {
+  color: 
+} */
 .alert {
   position: fixed;
   top: 0;

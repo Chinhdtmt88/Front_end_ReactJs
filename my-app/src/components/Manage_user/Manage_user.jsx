@@ -17,6 +17,7 @@ import {
 import "antd/dist/antd.css";
 import moment from "moment";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import { red, volcano, gold, yellow, lime, green } from "@ant-design/colors";
 import EditRoleUser from "./modals/EditRoleUser";
 import { AllUser } from "../../actions/users";
 import userApi from "../../api/userApi";
@@ -57,7 +58,7 @@ function Manage_user({
         ...prev,
         visible: !prev.visible,
         isEdit: !prev.visible ? true : false,
-        id: record.id,
+        id: record._id,
         data: record,
       }));
     };
@@ -69,14 +70,14 @@ function Manage_user({
     const _handleDeleteuser = async () => {
       const response = await userApi.deleteUser(record._id);
       if (response.status) {
-        message.success("Xoa User thanh cong");
+        message.success("Xóa User thành công");
         _handleGetUser();
         onChangeParam({
           page: params.page,
           size: params.size,
         });
       } else {
-        message.error(get(response, "data.message", "Co loi xay ra"), 5);
+        message.error(get(response, "data.message", "Có lỗi xảy ra"), 5);
       }
     };
 
@@ -84,19 +85,19 @@ function Manage_user({
       <Row align="middle" justify="center">
         <Col>
           <Button size="small" type="text" onClick={_handleShowModal}>
-            <EditOutlined />
+            <EditOutlined style={{ color: "#389e0d" }} />
           </Button>
         </Col>
         <Col>
           <Popconfirm
-            cancelText="Quay lai"
-            okText="xac nhan"
+            cancelText="Quay lại"
+            okText="Xác nhận"
             placement="topRight"
-            title="Xac nhan xoa user"
+            title="Xác nhận xóa user"
             onConfirm={_handleDeleteuser}
           >
             <Button size="small" type="text">
-              <DeleteOutlined />
+              <DeleteOutlined className="text-danger" />
             </Button>
           </Popconfirm>
         </Col>
@@ -112,6 +113,9 @@ function Manage_user({
       key: "stt",
       width: "3%",
       align: "center",
+      render: (stt) => (
+        <b style={{ fontWeight: 400 }}>{stt || DEFAULT_VALUE}</b>
+      ),
     },
 
     {
@@ -119,21 +123,27 @@ function Manage_user({
       title: "Name",
       width: "8%",
       align: "center",
-      render: (name) => name || DEFAULT_VALUE,
+      render: (name) => (
+        <b style={{ fontWeight: 400 }}>{name || DEFAULT_VALUE}</b>
+      ),
     },
     {
       dataIndex: "email",
       title: "Email",
       width: "8%",
       align: "center",
-      render: (email) => email || DEFAULT_VALUE,
+      render: (email) => (
+        <b style={{ fontWeight: 400 }}>{email || DEFAULT_VALUE}</b>
+      ),
     },
     {
       dataIndex: "role",
       title: "Role",
       width: "8%",
       align: "center",
-      render: (role) => role || DEFAULT_VALUE,
+      render: (role) => (
+        <b style={{ fontWeight: 400 }}>{role || DEFAULT_VALUE}</b>
+      ),
     },
     {
       dataIndex: "passwordChangedAt",
@@ -141,10 +151,13 @@ function Manage_user({
       width: "8%",
       align: "center",
       render: (passwordChangedAt) => {
-        // eslint-disable-next-line no-unused-expressions
-        return passwordChangedAt
-          ? moment(passwordChangedAt).format(TIME_FORMAT_DATE_TIME)
-          : DEFAULT_VALUE;
+        return (
+          <b style={{ fontWeight: 400 }}>
+            {passwordChangedAt
+              ? moment(passwordChangedAt).format(TIME_FORMAT_DATE_TIME)
+              : DEFAULT_VALUE}
+          </b>
+        );
       },
     },
     {
@@ -166,8 +179,6 @@ function Manage_user({
 
   return (
     <>
-      <h2>This is ❤❤😊😂😂😂manage_user</h2>
-
       <Card
         size="small"
         style={CARD_STYLE}

@@ -56,9 +56,9 @@ function ManageUser() {
     await dispatch(AllUser.getAllUser(params));
   }, [params]);
 
-  // useEffect(() => {
-  //   _handleGetUser();
-  // }, [_handleGetUser]);
+  useEffect(() => {
+    _handleGetUser();
+  }, [_handleGetUser]);
 
   const onChangeParam = (param) => {
     if (!param.page && !param.size) {
@@ -82,6 +82,7 @@ function ManageUser() {
 
   return (
     <>
+      <h2 className="manage_user">Manage all User ✔✨😃🤞✌😉💕</h2>
       <Col span={24}>
         <Manage_user
           loading={loading}

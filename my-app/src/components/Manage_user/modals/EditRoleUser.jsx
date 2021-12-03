@@ -1,34 +1,42 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Form, Input, Button, Modal } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import { Form, Input, Button, Modal, message } from "antd";
 import _ from "lodash";
+import { AllUser } from "../../../actions/users";
 import userApi from "../../../api/userApi";
-let timer = null;
+
 function EditRoleUser({ modal, onShowModal }) {
   const layout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 16 },
   };
 
-  let { visible, name, email, role, data, passwordChangedAt } = modal;
+  let { visible, data, id } = modal;
 
   const [form] = Form.useForm();
   const title = "Chỉnh sửa thông tin User";
 
   const [isButtonLoading, setButtonLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  const [loading, setLoading] = useState(false);
-
-  const _callApi = async (id, data, isEdit) => {
+  const _handleGetUser = async () => {
+    await dispatch(AllUser.getAllUser());
+  };
+  const _callApi = async (data) => {
     setButtonLoading((prev) => ({
       ...prev,
       value: true,
     }));
 
     let response = null;
-    if (isEdit) {
-      response = await userApi.updateUser(id, data);
+    console.log(id);
+    response = await userApi.updateUser(id, data);
+    if (response.status) {
+      message.success("update User thành công");
+      _handleGetUser();
+    } else {
+      message.error("data.message", "Có lỗi xảy ra");
     }
-
     setButtonLoading((prev) => ({
       ...prev,
       value: false,
@@ -42,7 +50,7 @@ function EditRoleUser({ modal, onShowModal }) {
   const _handleSubmit = async () => {
     let validate = await form.validateFields();
     if (!validate.outofDate) {
-      const { name, email, role } = form.getFieldValue([
+      const { name, email, role } = form.getFieldsValue([
         "name",
         "email",
         "role",
@@ -53,6 +61,9 @@ function EditRoleUser({ modal, onShowModal }) {
         email,
         role,
       };
+
+      _callApi(data);
+      console.log(data);
     }
   };
 
@@ -107,7 +118,7 @@ function EditRoleUser({ modal, onShowModal }) {
           rules={[
             {
               required: true,
-              message: "Vui long nhap ten",
+              message: "Vui lòng nhập tên",
             },
           ]}
           name={"name"}
@@ -120,23 +131,23 @@ function EditRoleUser({ modal, onShowModal }) {
           rules={[
             {
               required: true,
-              message: "Vui long nhap email",
+              message: "Vui lòng nhập email",
             },
           ]}
-          email={"email"}
+          name={"email"}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
-          label={"role"}
+          label={"Role"}
           rules={[
             {
               required: true,
-              message: "Vui long nhap role",
+              message: "Vui lòng nhập vị trí",
             },
           ]}
-          role={"role"}
+          name={"role"}
         >
           <Input />
         </Form.Item>
