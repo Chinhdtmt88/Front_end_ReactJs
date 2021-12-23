@@ -143,6 +143,13 @@ body {
 /* .text-ghtk {
   color: 
 } */
+.video {
+  font-family: sans-serif;
+  text-align: center;
+}
+.video-react-big-play-button {
+  display: none !important;
+}
 .alert {
   position: fixed;
   top: 0;
@@ -619,6 +626,8 @@ body {
   background: none;
   border: none;
   cursor: pointer;
+  width: 32px;
+  height: 40px;
 }
 
 .marker-btn img {

@@ -4,7 +4,13 @@ import moment from "moment";
 import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { FaStar } from "react-icons/fa";
-// eslint-disable-next-line import/no-webpack-loader-syntax
+import { Button, Modal, Tooltip } from "antd";
+import { Player } from "video-react";
+import { Card, Col, Dropdown, Menu, Row, Typography } from "antd";
+import { get, toNumber } from "lodash";
+import { DownOutlined, LeftOutlined, RightOutlined } from "@ant-design/icons";
+import ReactPlayer from "react-player";
+import "video-react/dist/video-react.css";
 import ReactMapGL, { Marker, Popup } from "react-map-gl";
 import tourApi from "../api/tourApi";
 
@@ -13,6 +19,8 @@ const REACT_APP_MAPBOX_TOKEN =
 
 function Tour(props) {
   console.log("den day chưa");
+  const toolTipRef = useRef(null);
+  const [show, setShow] = useState(false);
   const { tours } = useSelector((state) => state.tour);
   const { slug, tourId } = useParams();
   const [tour, setTour] = useState({
@@ -30,7 +38,22 @@ function Tour(props) {
     // longitude: 105.85061296268242,
     // zoom: 9,
   });
-
+  const DETAIL_STYLE = {
+    position: "absolute",
+    top: 2,
+    right: 2,
+    width: 350,
+  };
+  const CARD_STYLE = {
+    borderRadius: "0.42rem",
+    boxShadow: "0px 0px 30px 0px rgba(82, 63, 105, 0.05)",
+  };
+  const COLLAPSE_BUTTON_STYLE = {
+    position: "absolute",
+    left: -24,
+    top: 80,
+    height: 40,
+  };
   const [selectpoint, setSelectedPoint] = useState(null);
 
   useEffect(() => {
@@ -134,6 +157,27 @@ function Tour(props) {
     };
   }, []);
 
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const hideModal = () => {
+    setIsModalVisible(false);
+  };
+
+  const [play, setPlay] = useState(true);
+
+  const pause = () => {
+    this.player.pause();
+  };
+
+  useEffect(() => {
+    if (selectpoint) {
+      setShow(true);
+    }
+  }, [selectpoint]);
+
   return (
     <>
       <section className="section-header">
@@ -203,6 +247,10 @@ function Tour(props) {
           >
             {tour.locations.map((point) => (
               <Marker
+                onClick={(e) => {
+                  e.preventDefault();
+                  setSelectedPoint(point);
+                }}
                 key={tour.locations._id}
                 latitude={point.coordinates[1]}
                 longitude={point.coordinates[0]}
@@ -218,7 +266,6 @@ function Tour(props) {
                 </button>
               </Marker>
             ))}
-
             {selectpoint ? (
               <Popup
                 latitude={selectpoint.coordinates[1]}
@@ -232,9 +279,83 @@ function Tour(props) {
                 </div>
               </Popup>
             ) : null}
+
+            <div
+              style={{
+                ...DETAIL_STYLE,
+                width: show ? 350 : 0,
+              }}
+            >
+              <Button
+                size="small"
+                // className="d-flex align-items-center justify-content-center"
+                // title="Xem chi tiết"
+                onClick={() => {
+                  if (selectpoint) {
+                    setShow((prev) => !prev);
+                  }
+                }}
+                style={COLLAPSE_BUTTON_STYLE}
+                icon={show ? <RightOutlined /> : <LeftOutlined />}
+              />
+              {show && (
+                <Card
+                  size="small"
+                  style={CARD_STYLE}
+                  bodyStyle={{
+                    maxHeight: "calc(100vh - 180px)",
+                    overflow: "auto",
+                  }}
+                >
+                  <h4 className="text-secondary">{selectpoint.description}</h4>
+                  <Button type="primary" onClick={showModal}>
+                    See More
+                  </Button>
+                  <h4>ALo Alo ALo</h4>
+                  <span>Ban muon di dau nao</span>
+                  <Modal
+                    title="Overview tour"
+                    visible={isModalVisible}
+                    footer={null}
+                    onCancel={hideModal}
+                    // afterClose={pause}
+                    bodyStyle={{ padding: 0 }}
+                  >
+                    <Player autoPlay>
+                      <source
+                        src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+                        type="video/mp4"
+                      />
+                    </Player>
+                  </Modal>
+                </Card>
+              )}
+            </div>
           </ReactMapGL>
         </div>
       </section>
+
+      {/* 
+      <>
+        <Button type="primary" onClick={showModal}>
+          See More
+        </Button>
+        <Modal
+          title="Overview tour"
+          visible={isModalVisible}
+          footer={null}
+          onCancel={hideModal}
+          // afterClose={pause}
+          bodyStyle={{ padding: 0 }}
+        >
+          <Player autoPlay>
+            <source
+              src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
+              type="video/mp4"
+            />
+          </Player>
+        </Modal>
+      </> */}
 
       <section>
         <div className="reviews">
@@ -242,12 +363,12 @@ function Tour(props) {
             <>
               <div className="reviews__card">
                 <div className="reviews__avatar">
-                  <img
+                  {/* <img
                     className="reviews__avatar-img"
-                    src={`/users/${review.user.photo}`}
-                    alt={`${review.user.name}`}
-                  />
-                  <h4 className="reviews__user">{review.user.name}</h4>
+                    // src={`/users/${review.user.photo}`}
+                    // alt={`${review.user.name}`}
+                  /> */}
+                  {/* <h4 className="reviews__user">{review.user.name}</h4> */}
                 </div>
                 <h4 className="review__text">{review.review}</h4>
                 <div className="reviews__rating">

@@ -14,7 +14,6 @@ import {
   Row,
   Popconfirm,
 } from "antd";
-import "antd/dist/antd.css";
 import moment from "moment";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { red, volcano, gold, yellow, lime, green } from "@ant-design/colors";

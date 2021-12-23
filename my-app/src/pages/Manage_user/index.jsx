@@ -1,29 +1,13 @@
-/* eslint-disable no-undef */
 /* eslint-disable react/jsx-pascal-case */
 import React, { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  Card,
-  Col,
-  Form,
-  Input,
-  Row,
-  DatePicker,
-  Button,
-  Table,
-  Typography,
-  Modal,
-  message,
-} from "antd";
+import { Col, Form, DatePicker } from "antd";
 import _ from "lodash";
 import Manage_user from "../../components/Manage_user/Manage_user";
 import { AllUser } from "../../actions/users";
 import { PAGINATION } from "../../reducers/constant";
-import moment from "moment";
-import userApi from "../../api/userApi";
-import { ExclamationCircleOutlined, EditOutlined } from "@ant-design/icons";
 import EditRoleUser from "../../components/Manage_user/modals/EditRoleUser";
-let timer = null;
+
 function ManageUser() {
   const CARD_STYLE = {
     borderRadius: "0.42rem",
@@ -32,8 +16,6 @@ function ManageUser() {
   const today = new Date();
   const { RangePicker } = DatePicker;
   const dispatch = useDispatch();
-
-  const [form] = Form.useForm();
 
   const { alluser, total } = useSelector((state) => state.user);
 

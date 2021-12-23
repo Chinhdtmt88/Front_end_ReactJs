@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from "react";
-import UserService from "../services/user.service";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 import tourActions from "../actions/tours";
+import tourApi from "../api/tourApi";
 
 const Home = () => {
   const [listTour, setListtour] = useState([]);
   const dispatch = useDispatch();
   // const listTour = useSelector((state) => state.tour.tours);
   useEffect(() => {
-    UserService.getPublicContent().then(
+    tourApi.getAll().then(
       (response) => {
         console.log("xong roi moi chay vao day");
         dispatch(tourActions.SetAllTour(response.data.data));

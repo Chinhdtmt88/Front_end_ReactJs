@@ -61,11 +61,11 @@ const App = () => {
               <div className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <Link to={"/profile"} className="nav__el">
-                    <img
+                    {/* <img
                       className="nav__user-img"
                       src={`../users/${currentUser.photo}`}
                       alt={`Photo of ${currentUser.name}`}
-                    />
+                    /> */}
                     {currentUser.name}
                   </Link>
                 </li>

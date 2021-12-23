@@ -265,7 +265,7 @@ const Profile = () => {
                 />
               </div>
 
-              <div className="form__group form__photo-upload">
+              {/* <div className="form__group form__photo-upload">
                 <img
                   src={`../users/${user.photo}`}
                   className="form__user-photo"
@@ -279,7 +279,7 @@ const Profile = () => {
                   onChange={onChangePhoto}
                 />
                 <label htmlFor="photo">Choose new photo</label>
-              </div>
+              </div> */}
               <div className="form-group right">
                 <button
                   className="btn btn--small btn--green"
