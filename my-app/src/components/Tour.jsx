@@ -321,12 +321,13 @@ function Tour(props) {
                     // afterClose={pause}
                     bodyStyle={{ padding: 0 }}
                   >
-                    <Player autoPlay>
+                    {/* <Player autoPlay>
                       <source
                         src="https://media.w3.org/2010/05/sintel/trailer_hd.mp4"
                         type="video/mp4"
                       />
-                    </Player>
+                    </Player> */}
+                    <ReactPlayer url="https://www.youtube.com/watch?v=1nBlM6LqxfU" />
                   </Modal>
                 </Card>
               )}
